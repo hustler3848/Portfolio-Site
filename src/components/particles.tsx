@@ -9,26 +9,27 @@ import { useIsMobile } from '@/hooks/use-mobile';
 interface ParticlesProps {
   className?: string;
   quantity?: number;
-  friction?: number;
-  gravity?: number;
-  connectDistance?: number;
+  mainCircleSize?: number;
+  sprayInterval?: number; // ms between sprays
+  particleLife?: number; // ms
 }
 
 export function Particles({
   className,
-  quantity = 150,
-  friction = 0.98,
-  gravity = 0.05,
-  connectDistance = 100
+  mainCircleSize = 15,
+  sprayInterval = 100,
+  particleLife = 2000,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
-  const circles = useRef<any[]>([]);
-  const mouse = useRef<{ x: number | null; y: number; }>({ x: null, y: null });
+  const particles = useRef<any[]>([]);
+  const mouse = useRef<{ x: number; y: number; }>({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const follower = useRef<{ x: number; y: number; }>({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
   const { theme } = useTheme();
   const isMobile = useIsMobile();
+  const lastSprayTime = useRef(0);
 
   useEffect(() => {
     if (isMobile) return;
@@ -36,11 +37,12 @@ export function Particles({
       context.current = canvasRef.current.getContext('2d');
     }
     initCanvas();
-    animate();
+    const animationFrameId = requestAnimationFrame(animate);
     window.addEventListener('resize', initCanvas);
 
     return () => {
       window.removeEventListener('resize', initCanvas);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [theme, isMobile]);
 
@@ -51,23 +53,15 @@ export function Particles({
       mouse.current.y = e.clientY;
     };
 
-    const handleMouseLeave = () => {
-      mouse.current.x = null;
-      mouse.current.y = null;
-    };
-
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
         window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [isMobile]);
 
   const initCanvas = () => {
     resizeCanvas();
-    drawParticles();
   };
 
   const resizeCanvas = () => {
@@ -82,7 +76,7 @@ export function Particles({
     }
   };
 
-  class Circle {
+  class Particle {
     x: number;
     y: number;
     size: number;
@@ -90,16 +84,21 @@ export function Particles({
     velocity: { x: number; y: number };
     color: string;
     hue: number;
+    life: number;
+    maxLife: number;
 
-    constructor() {
-      const { w, h } = canvasSize.current;
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.size = Math.random() * 2 + 0.5;
-      this.alpha = 0.1 + Math.random() * 0.3;
-      this.velocity = { x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2 };
+    constructor(x: number, y: number) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 3 + 1; // Smaller droplets
+      this.alpha = 1;
+      const angle = Math.random() * 2 * Math.PI;
+      const speed = Math.random() * 2;
+      this.velocity = { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
       this.hue = Math.floor(Math.random() * 360);
       this.color = `hsla(${this.hue}, 100%, 70%, ${this.alpha})`;
+      this.maxLife = particleLife + Math.random() * 1000;
+      this.life = this.maxLife;
     }
 
     draw() {
@@ -112,85 +111,45 @@ export function Particles({
     }
 
     update() {
-      const { w, h } = canvasSize.current;
-      
-      // Apply gravity
-      this.velocity.y += gravity;
-
-      // Apply friction
-      this.velocity.x *= friction;
-      this.velocity.y *= friction;
-
-      // Attract to mouse
-      if (mouse.current.x !== null && mouse.current.y !== null) {
-        const dx = mouse.current.x - this.x;
-        const dy = mouse.current.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist > 1) { // prevent division by zero
-          const forceDirectionX = dx / dist;
-          const forceDirectionY = dy / dist;
-          
-          // The force is stronger when closer to the mouse
-          const force = (Math.max(300 - dist, 0) / 300) * 0.6;
-          
-          this.velocity.x += forceDirectionX * force;
-          this.velocity.y += forceDirectionY * force;
-        }
-      }
-
       // Update position
       this.x += this.velocity.x;
       this.y += this.velocity.y;
 
-      // Bounce off walls
-      if (this.x <= this.size || this.x >= w - this.size) {
-        this.velocity.x *= -0.8;
-        this.x = this.x <= this.size ? this.size : w - this.size;
-      }
-      if (this.y <= this.size || this.y >= h - this.size) {
-        this.velocity.y *= -0.8;
-        this.y = this.y <= this.size ? this.size : h - this.size;
-      }
-      
-      // Update color and alpha
-      this.hue += 0.5;
+      // Reduce life
+      this.life -= 16; // rough estimate for 60fps
+
+      // Update alpha based on life
+      this.alpha = Math.max(0, this.life / this.maxLife);
       this.color = `hsla(${this.hue}, 100%, 70%, ${this.alpha})`;
     }
   }
 
-  const drawParticles = () => {
-    circles.current = [];
-    for (let i = 0; i < quantity; i++) {
-      circles.current.push(new Circle());
-    }
-  };
-  
-  const animate = () => {
+  const animate = (timestamp: number) => {
     if (!context.current) return;
     const { w, h } = canvasSize.current;
     context.current.clearRect(0, 0, w, h);
     
-    circles.current.forEach((circle, i) => {
-        circle.update();
-        circle.draw();
+    // Lerp follower towards mouse
+    follower.current.x += (mouse.current.x - follower.current.x) * 0.1;
+    follower.current.y += (mouse.current.y - follower.current.y) * 0.1;
+    
+    // Draw follower circle
+    context.current.beginPath();
+    context.current.arc(follower.current.x, follower.current.y, mainCircleSize, 0, 2 * Math.PI);
+    context.current.fillStyle = `hsl(${timestamp / 20 % 360}, 100%, 70%)`;
+    context.current.fill();
 
-        // Draw connection lines
-        for (let j = i + 1; j < circles.current.length; j++) {
-            const otherCircle = circles.current[j];
-            const dist = Math.sqrt(Math.pow(circle.x - otherCircle.x, 2) + Math.pow(circle.y - otherCircle.y, 2));
+    // Spray particles
+    if (timestamp - lastSprayTime.current > sprayInterval) {
+        particles.current.push(new Particle(follower.current.x, follower.current.y));
+        lastSprayTime.current = timestamp;
+    }
 
-            if (dist < connectDistance) {
-                if (context.current) {
-                    context.current.strokeStyle = `hsla(${circle.hue}, 100%, 70%, ${1 - dist / connectDistance})`;
-                    context.current.lineWidth = 0.5;
-                    context.current.beginPath();
-                    context.current.moveTo(circle.x, circle.y);
-                    context.current.lineTo(otherCircle.x, otherCircle.y);
-                    context.current.stroke();
-                }
-            }
-        }
+    // Update and draw particles
+    particles.current = particles.current.filter(p => p.life > 0);
+    particles.current.forEach(p => {
+        p.update();
+        p.draw();
     });
 
     requestAnimationFrame(animate);
