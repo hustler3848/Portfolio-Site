@@ -12,9 +12,9 @@ import {
 import { motion } from 'framer-motion';
 
 const socialLinks = [
-  { name: "GitHub", icon: Github, url: "https://github.com" },
-  { name: "LinkedIn", icon: Linkedin, url: "https://linkedin.com" },
-  { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
+  { name: "GitHub", icon: Github, url: "https://github.com/Darshwan" },
+  { name: "LinkedIn", icon: Linkedin, url: "https://www.linkedin.com/in/darshan-lamichhane-0a1b13278/" },
+  { name: "Twitter", icon: Twitter, url: "https://x.com/Darashwan_3848" },
 ];
 
 export function Footer() {
