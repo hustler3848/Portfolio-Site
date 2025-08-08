@@ -9,33 +9,33 @@ import { Button } from "@/components/ui/button";
 const blogData = [
   {
     id: 1,
-    title: "The Art of Minimalism in Web Design",
-    excerpt: "Discover how simplifying your design can lead to more engaging and effective user experiences. Less is often more.",
-    date: "2024-05-15",
-    readTime: "5 min read",
+    title: "15 Best Chrome Extensions for Productivity in 2025 (Tested)",
+    excerpt: "15 Best Chrome Extensions for Productivity in 2025 (Tested)",
+    date: "April 25, 2025",
+    readTime: "7 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    url: "#!",
-    dataAiHint: "minimalist design",
+    url: "https://info-glimpse.blogspot.com/2025/04/best-chrome-extensions-for-productivity.html",
+    dataAiHint: "chrome extensions productivity",
   },
   {
     id: 2,
-    title: "Framer Motion: Advanced Animation Techniques",
-    excerpt: "A deep dive into creating complex, performant animations that bring your React applications to life.",
-    date: "2024-04-22",
-    readTime: "8 min read",
+    title: "7 Best Free Productivity Apps for Students (2025)",
+    excerpt: "Let’s face it — juggling lectures, assignments, group projects, and maybe even a part-time job?",
+    date: "April 25, 2025",
+    readTime: "10 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    url: "#!",
-    dataAiHint: "abstract animation",
+    url: "https://info-glimpse.blogspot.com/2025/04/best-free-productivity-apps-for.html",
+    dataAiHint: "student productivity apps",
   },
   {
     id: 3,
-    title: "Building a Design System with Tailwind CSS",
-    excerpt: "Learn the step-by-step process of creating a scalable and maintainable design system using the power of Tailwind CSS.",
-    date: "2024-03-30",
-    readTime: "12 min read",
+    title: "How to Use ChatGPT for Content Writing",
+    excerpt: "Writing content doesn’t have to be a long, stressful process anymore. Whether you're a blogger, marketer, or student, ChatGPT can be your powerful sidekick",
+    date: "July 22, 2025",
+    readTime: "9 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    url: "#!",
-    dataAiHint: "design system",
+    url: "https://info-glimpse.blogspot.com/2025/07/how-to-use-chatgpt-for-content-writing.html",
+    dataAiHint: "ai content writing",
   },
 ];
 
@@ -114,11 +114,10 @@ export function Blogs() {
             variants={itemVariants}
         >
           <Button size="lg" asChild className="blob-link">
-            <a href="#!" target="_blank" rel="noopener noreferrer">View More</a>
+            <a href="https://info-glimpse.blogspot.com/" target="_blank" rel="noopener noreferrer">View More</a>
           </Button>
         </motion.div>
       </motion.div>
     </section>
   );
 }
-
