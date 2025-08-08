@@ -38,7 +38,7 @@ const projectsData = [
     category: "Portfolio",
     imageUrl: "/images/project-4.png",
     dataAiHint: "portfolio website",
-    liveDemoUrl: "#!",
+    liveDemoUrl: "https://exam-pdf-pro.vercel.app/",
   },
 ];
 
