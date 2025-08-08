@@ -7,6 +7,7 @@ import { AppProviders } from '@/components/providers/app-providers';
 export const metadata: Metadata = {
   title: 'Darshan - Creative Portfolio',
   description: 'A creative portfolio built with Next.js, Framer Motion, and Locomotive Scroll.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({

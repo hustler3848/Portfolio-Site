@@ -16,6 +16,8 @@ import { CustomCursor } from "@/components/custom-cursor";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [keySequence, setKeySequence] = useState('');
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
   useEffect(() => {
     // Simulate loading time
@@ -28,13 +30,37 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(registration => console.log('Service Worker registered with scope:', registration.scope))
+        .catch(error => console.log('Service Worker registration failed:', error));
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key.length > 1) return; // Ignore keys like Shift, Control, etc.
+      const newSequence = (keySequence + e.key).slice(-5);
+      setKeySequence(newSequence);
+      if (newSequence.toLowerCase() === 'hello') {
+        setShowEasterEgg(true);
+        setTimeout(() => setShowEasterEgg(false), 4000); // Animation for 4s
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [keySequence]);
+
   return (
     <SmoothScroll>
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
       <CustomCursor />
-      <Particles className="fixed inset-0 -z-10" quantity={150} />
+      <Particles className="fixed inset-0 -z-10" quantity={150} celebration={showEasterEgg} />
       <Header />
       <main className="flex flex-col">
         <Intro />

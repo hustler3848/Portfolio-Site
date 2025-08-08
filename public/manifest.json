@@ -1,0 +1,21 @@
+{
+  "name": "Darshan - Creative Portfolio",
+  "short_name": "Darshan",
+  "description": "A creative portfolio built with Next.js, Framer Motion, and Locomotive Scroll.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#00f6ff",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

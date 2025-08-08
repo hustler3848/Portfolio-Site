@@ -12,6 +12,7 @@ interface ParticlesProps {
   mainCircleSize?: number;
   sprayInterval?: number; // ms between sprays
   particleLife?: number; // ms
+  celebration?: boolean;
 }
 
 export function Particles({
@@ -19,6 +20,7 @@ export function Particles({
   mainCircleSize = 15,
   sprayInterval = 100,
   particleLife = 2000,
+  celebration = false
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -45,6 +47,12 @@ export function Particles({
       cancelAnimationFrame(animationFrameId);
     };
   }, [theme, isMobile]);
+  
+  useEffect(() => {
+    if(celebration) {
+        triggerConfetti();
+    }
+  }, [celebration]);
 
   useEffect(() => {
     if (isMobile) return;
@@ -86,18 +94,34 @@ export function Particles({
     hue: number;
     life: number;
     maxLife: number;
+    gravity: number;
+    isConfetti: boolean;
 
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, isConfetti = false) {
       this.x = x;
       this.y = y;
-      this.size = Math.random() * 3 + 1; // Smaller droplets
+      this.isConfetti = isConfetti;
+      if (this.isConfetti) {
+          this.size = Math.random() * 5 + 2;
+          this.gravity = 0.05 + Math.random() * 0.1;
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.velocity = {
+              x: Math.cos(angle) * speed,
+              y: Math.sin(angle) * speed,
+          };
+
+      } else {
+        this.size = Math.random() * 3 + 1; // Smaller droplets
+        this.gravity = 0;
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 2;
+        this.velocity = { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
+      }
       this.alpha = 1;
-      const angle = Math.random() * 2 * Math.PI;
-      const speed = Math.random() * 2;
-      this.velocity = { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
       this.hue = Math.floor(Math.random() * 360);
       this.color = `hsla(${this.hue}, 100%, 70%, ${this.alpha})`;
-      this.maxLife = particleLife + Math.random() * 1000;
+      this.maxLife = (isConfetti ? particleLife * 2 : particleLife) + Math.random() * 1000;
       this.life = this.maxLife;
     }
 
@@ -111,6 +135,9 @@ export function Particles({
     }
 
     update() {
+      if(this.isConfetti) {
+          this.velocity.y += this.gravity;
+      }
       // Update position
       this.x += this.velocity.x;
       this.y += this.velocity.y;
@@ -124,6 +151,13 @@ export function Particles({
     }
   }
 
+  const triggerConfetti = () => {
+    const { w, h } = canvasSize.current;
+    for (let i = 0; i < 200; i++) {
+        particles.current.push(new Particle(w / 2, h/2, true));
+    }
+  }
+
   const animate = (timestamp: number) => {
     if (!context.current) return;
     const { w, h } = canvasSize.current;
@@ -133,18 +167,20 @@ export function Particles({
     follower.current.x += (mouse.current.x - follower.current.x) * 0.1;
     follower.current.y += (mouse.current.y - follower.current.y) * 0.1;
     
-    // Draw follower circle
-    context.current.beginPath();
-    context.current.arc(follower.current.x, follower.current.y, mainCircleSize, 0, 2 * Math.PI);
-    context.current.fillStyle = `hsl(${timestamp / 20 % 360}, 100%, 70%)`;
-    context.current.fill();
+    if(!celebration){
+        // Draw follower circle
+        context.current.beginPath();
+        context.current.arc(follower.current.x, follower.current.y, mainCircleSize, 0, 2 * Math.PI);
+        context.current.fillStyle = `hsl(${timestamp / 20 % 360}, 100%, 70%)`;
+        context.current.fill();
 
-    // Spray particles
-    if (timestamp - lastSprayTime.current > sprayInterval) {
-        particles.current.push(new Particle(follower.current.x, follower.current.y));
-        lastSprayTime.current = timestamp;
+        // Spray particles
+        if (timestamp - lastSprayTime.current > sprayInterval) {
+            particles.current.push(new Particle(follower.current.x, follower.current.y));
+            lastSprayTime.current = timestamp;
+        }
     }
-
+    
     // Update and draw particles
     particles.current = particles.current.filter(p => p.life > 0);
     particles.current.forEach(p => {
