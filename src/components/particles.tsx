@@ -14,13 +14,14 @@ interface ParticlesProps {
 
 export function Particles({
   className,
-  quantity = 30,
-  ease = 5,
+  quantity = 50,
+  ease = 2,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const circles = useRef<any[]>([]);
-  const mouse = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const mouse = useRef<{ x: number | null; y: number | null; dx: number; dy: number }>({ x: null, y: null, dx: 0, dy: 0 });
+  const lastMousePosition = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
   const { theme } = useTheme();
@@ -38,16 +39,24 @@ export function Particles({
     return () => {
       window.removeEventListener('resize', initCanvas);
     };
-  }, [theme, isMobile]); // Rerun on theme change
+  }, [theme, isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
+        const { clientX, clientY } = e;
+        if (lastMousePosition.current.x !== null) {
+            mouse.current.dx = clientX - lastMousePosition.current.x;
+            mouse.current.dy = clientY - lastMousePosition.current.y;
+        }
+        lastMousePosition.current = { x: clientX, y: clientY };
+        mouse.current.x = clientX;
+        mouse.current.y = clientY;
     };
 
     const handleMouseLeave = () => {
-        mouse.current = { x: null, y: null };
+        mouse.current = { x: null, y: null, dx: 0, dy: 0 };
+        lastMousePosition.current = { x: null, y: null };
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -83,18 +92,20 @@ export function Particles({
     alpha: number;
     velocity: { x: number; y: number };
     color: string;
+    swirlAngle: number;
+    swirlRadius: number;
 
     constructor() {
       const { w, h } = canvasSize.current;
       this.x = Math.random() * w;
       this.y = Math.random() * h;
-      this.size = Math.random() * 5 + 2; // Increased size
+      this.size = Math.random() * 8 + 4; // Increased size further
       this.alpha = 0;
       this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
-      
-      // Assign a random multi-color hue
       const hue = Math.floor(Math.random() * 360);
       this.color = `${hue}, 100%, 70%`;
+      this.swirlAngle = Math.random() * Math.PI * 2;
+      this.swirlRadius = Math.random() * 80 + 20;
     }
 
     draw() {
@@ -111,22 +122,36 @@ export function Particles({
           const dx = mouse.current.x - this.x;
           const dy = mouse.current.y - this.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+          const mouseSpeed = Math.sqrt(mouse.current.dx * mouse.current.dx + mouse.current.dy * mouse.current.dy);
 
-          // Particles become visible when mouse is close
-          if (dist < 100) { 
-              this.alpha = Math.min(1, this.alpha + 0.1);
+          if (dist < 150) {
+              this.alpha = Math.min(1, this.alpha + 0.15);
           } else {
-              this.alpha = Math.max(0, this.alpha - 0.02);
+              this.alpha = Math.max(0, this.alpha - 0.04);
           }
           
-          if(dist > 0) {
-             this.x += dx / (ease / this.size);
-             this.y += dy / (ease / this.size);
+          if (mouseSpeed > 1) { // If mouse is moving, trail it
+            if (dist > 0) {
+              this.x += dx / (ease / this.size);
+              this.y += dy / (ease / this.size);
+            }
+          } else { // If mouse is still, swirl
+            this.swirlAngle += 0.03;
+            const swirlX = mouse.current.x + Math.cos(this.swirlAngle) * this.swirlRadius;
+            const swirlY = mouse.current.y + Math.sin(this.swirlAngle) * this.swirlRadius;
+            const swirlDx = swirlX - this.x;
+            const swirlDy = swirlY - this.y;
+            this.x += swirlDx / (ease / this.size * 2); // Slower easing for swirl
+            this.y += swirlDy / (ease / this.size * 2);
           }
 
       } else {
-          this.alpha = Math.max(0, this.alpha - 0.02);
+          this.alpha = Math.max(0, this.alpha - 0.04);
       }
+
+      // Reset mouse delta
+      mouse.current.dx *= 0.95;
+      mouse.current.dy *= 0.95;
     }
   }
 
