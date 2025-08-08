@@ -86,7 +86,7 @@ export function Header() {
               key={link.name}
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href);}}
-              className="link-underline text-base font-medium text-foreground/80 transition-colors hover:text-foreground"
+              className="link-underline text-base font-medium text-foreground transition-colors hover:text-primary/90"
             >
               {link.name}
             </a>
@@ -112,7 +112,7 @@ export function Header() {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href);}}
-                className="text-lg font-medium text-foreground"
+                className="text-lg font-medium text-foreground transition-colors hover:text-primary/90"
               >
                 {link.name}
               </a>
