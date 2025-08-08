@@ -1,4 +1,3 @@
-
 "use client";
 import { ProjectCard } from "@/components/project-card";
 import { motion } from "framer-motion";
@@ -6,7 +5,7 @@ import { motion } from "framer-motion";
 const projectsData = [
   {
     title: "FrameFlux",
-    description: "A movies, webseries/ Anime Web App",
+    description: "Explore a vast library of movies, web series, and anime. Discover new titles, read reviews, and track your watchlist in this sleek entertainment hub.",
     imageUrl: "https://placehold.co/600x400.png",
     tags: ["Next JS", "Firebase"],
     liveUrl: "https://frameflux.vercel.app/",
@@ -15,7 +14,7 @@ const projectsData = [
   },
   {
     title: "CodeSnippr",
-    description: "A developers application where they can save the code snippets and reuse them anytime they want.",
+    description: "A developer's productivity tool to save, organize, and quickly access code snippets. Boost your workflow and never lose a useful piece of code again.",
     imageUrl: "https://placehold.co/600x400.png",
     tags: ["Next JS", "Firebase"],
     liveUrl: "https://dev-book-weld.vercel.app/",
@@ -24,7 +23,7 @@ const projectsData = [
   },
   {
     title: "MindGuard",
-    description: "A Site where students can maintain there Mental Health.",
+    description: "A supportive space for students to prioritize their mental well-being. Access resources, track moods, and find tools to help manage academic stress.",
     imageUrl: "https://placehold.co/600x400.png",
     tags: ["Next JS", "Firebase"],
     liveUrl: "https://mind-guard-three.vercel.app/",

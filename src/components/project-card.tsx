@@ -61,9 +61,9 @@ export function ProjectCard({ project }: { project: Project }) {
         rotateX,
         transformStyle: "preserve-3d",
       }}
-      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl"
+      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl h-full flex flex-col"
     >
-      <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }} className="p-6">
+      <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }} className="p-6 flex flex-col flex-grow">
         <div className="relative aspect-video rounded-md overflow-hidden mb-4" style={{ transform: "translateZ(20px)" }}>
           <Image
             src={project.imageUrl}
@@ -78,7 +78,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         
         <h3 className="font-headline text-2xl font-bold mb-2">{project.title}</h3>
-        <p className="text-card-foreground/80 mb-4">{project.description}</p>
+        <p className="text-card-foreground/80 mb-4 flex-grow">{project.description}</p>
         
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tags.map(tag => (
