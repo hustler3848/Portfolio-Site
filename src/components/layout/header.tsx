@@ -2,10 +2,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useAnimation, useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { useTheme } from "@/components/providers/theme-provider";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -16,24 +17,14 @@ const navLinks = [
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const controls = useAnimation();
   const { scrollY } = useScroll();
+  const { theme } = useTheme(); // Re-render on theme change
 
   useEffect(() => {
     return scrollY.on('change', (latest) => {
         setIsScrolled(latest > 10);
     });
   }, [scrollY]);
-  
-  useEffect(() => {
-    controls.start({
-        backgroundColor: isScrolled ? "hsl(var(--background) / 0.8)" : "hsl(var(--background) / 0)",
-        backdropFilter: isScrolled ? "blur(12px)" : "blur(0px)",
-        boxShadow: isScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)" : "0 0 0 rgba(0, 0, 0, 0)",
-        transition: { duration: 0.5, ease: "easeInOut" }
-    });
-  }, [isScrolled, controls]);
-
 
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
@@ -45,10 +36,27 @@ export function Header() {
     setIsOpen(false);
   };
 
+  const headerVariants = {
+    scrolled: { 
+      backgroundColor: "hsl(var(--background) / 0.8)",
+      backdropFilter: "blur(12px)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    },
+    top: { 
+      backgroundColor: "hsl(var(--background) / 0)",
+      backdropFilter: "blur(0px)",
+      boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
+    }
+  };
+
 
   return (
     <motion.header
-      animate={controls}
+      key={theme} // Force re-render on theme change
+      initial={isScrolled ? "scrolled" : "top"}
+      animate={isScrolled ? "scrolled" : "top"}
+      variants={headerVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed top-0 left-0 right-0 z-50 w-full"
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">

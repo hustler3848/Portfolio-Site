@@ -7,9 +7,10 @@ import { Sun, Moon, Zap, Coffee } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, themes } = useTheme();
+  const { theme, setTheme, themes, isChanging } = useTheme();
 
   const cycleTheme = () => {
+    if (isChanging) return;
     const currentIndex = themes.findIndex(t => t.value === theme);
     const nextIndex = (currentIndex + 1) % themes.length;
     setTheme(themes[nextIndex].value);
@@ -27,7 +28,7 @@ export function ThemeSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="ghost" size="icon" onClick={cycleTheme} aria-label="Cycle Theme">
+      <Button variant="ghost" size="icon" onClick={cycleTheme} aria-label="Cycle Theme" disabled={isChanging}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={theme}
