@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 import { saveMessage } from "@/app/actions";
 import { Loader2, Check, Send, User, Mail, MessageSquare } from "lucide-react";
 import { AnimatedInput } from "@/components/animated-input";
-import { Particles } from "@/components/particles";
 import { Progress } from "@/components/ui/progress";
 
 const formSchema = z.object({
@@ -84,7 +83,6 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
-      <Particles className="absolute inset-0 -z-10" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -209,5 +207,3 @@ export function Contact() {
     </section>
   );
 }
-
-    

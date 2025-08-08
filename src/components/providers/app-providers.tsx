@@ -1,6 +1,5 @@
 "use client";
 
-import { CustomCursor } from "@/components/custom-cursor";
 import { Toaster } from "@/components/ui/toaster";
 import { useTheme } from "./theme-provider";
 
@@ -11,7 +10,6 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <CustomCursor />
       {children}
       <Toaster />
     </>

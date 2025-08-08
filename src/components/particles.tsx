@@ -4,30 +4,30 @@
 import React, { useRef, useEffect } from 'react';
 import { useTheme } from '@/components/providers/theme-provider';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ParticlesProps {
   className?: string;
   quantity?: number;
-  staticity?: number;
   ease?: number;
 }
 
 export function Particles({
   className,
-  quantity = 50,
-  staticity = 40,
+  quantity = 30,
   ease = 50,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const circles = useRef<any[]>([]);
-  const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const mouse = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
   const { theme } = useTheme();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
+    if (isMobile) return;
     if (canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
     }
@@ -38,32 +38,26 @@ export function Particles({
     return () => {
       window.removeEventListener('resize', initCanvas);
     };
-  }, []);
-  
-  useEffect(() => {
-    if (canvasContainerRef.current) {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (canvasRef.current) {
-                const rect = canvasRef.current.getBoundingClientRect();
-                const { w, h } = canvasSize.current;
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                mouse.current = {
-                    x: x,
-                    y: y,
-                };
-            }
-        };
-        
-        canvasContainerRef.current.addEventListener('mousemove', handleMouseMove);
+  }, [theme, isMobile]); // Rerun on theme change
 
-        return () => {
-            if (canvasContainerRef.current) {
-                canvasContainerRef.current.removeEventListener('mousemove', handleMouseMove);
-            }
-        };
-    }
-  }, []);
+  useEffect(() => {
+    if (isMobile) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseLeave = () => {
+        mouse.current = { x: null, y: null };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [isMobile]);
 
   const initCanvas = () => {
     resizeCanvas();
@@ -71,10 +65,9 @@ export function Particles({
   };
 
   const resizeCanvas = () => {
-    if (canvasContainerRef.current && canvasRef.current && context.current) {
-      circles.current.length = 0;
-      canvasSize.current.w = canvasContainerRef.current.offsetWidth;
-      canvasSize.current.h = canvasContainerRef.current.offsetHeight;
+    if (canvasRef.current && context.current) {
+      canvasSize.current.w = window.innerWidth;
+      canvasSize.current.h = window.innerHeight;
       canvasRef.current.width = canvasSize.current.w * dpr;
       canvasRef.current.height = canvasSize.current.h * dpr;
       canvasRef.current.style.width = `${canvasSize.current.w}px`;
@@ -86,103 +79,90 @@ export function Particles({
   class Circle {
     x: number;
     y: number;
-    translateX: number;
-    translateY: number;
-    radius: number;
+    size: number;
     alpha: number;
-    targetAlpha: number;
-    dx: number;
-    dy: number;
-    magnetism: number;
+    velocity: { x: number; y: number };
+    color: string;
 
-    constructor(x?: number, y?: number) {
+    constructor() {
       const { w, h } = canvasSize.current;
-      this.x = x ?? Math.random() * w;
-      this.y = y ?? Math.random() * h;
-      this.translateX = 0;
-      this.translateY = 0;
-      this.radius = Math.random() * 1.5 + 0.5;
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.size = Math.random() * 1.5 + 0.5;
       this.alpha = 0;
-      this.targetAlpha = parseFloat((Math.random() * 0.6 + 0.1).toFixed(1));
-      this.dx = (Math.random() - 0.5) * 0.2;
-      this.dy = (Math.random() - 0.5) * 0.2;
-      this.magnetism = 0.1 + Math.random() * 4;
+      this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
+      this.color = "0,0,0";
+      this.updateColor();
+    }
+
+    updateColor() {
+      let accentHsl;
+      if (typeof window !== 'undefined') {
+        accentHsl = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+      } else {
+        accentHsl = "182 100% 50%";
+      }
+      const [h, s, l] = accentHsl.split(" ").map(val => parseFloat(val));
+      this.color = `${h}, ${s}%, ${l}%`;
     }
 
     draw() {
-      if(context.current) {
-        let accentHsl;
-        if (typeof window !== 'undefined') {
-            accentHsl = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-        } else {
-            accentHsl = "182 100% 50%";
-        }
-
-        const [h, s, l] = accentHsl.split(" ").map(val => parseFloat(val));
-        context.current.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${this.alpha})`;
+      if(context.current && this.alpha > 0) {
         context.current.beginPath();
-        context.current.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        context.current.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        context.current.fillStyle = `hsla(${this.color}, ${this.alpha})`;
         context.current.fill();
       }
     }
 
-    move() {
-      const { w, h } = canvasSize.current;
-      
-      let mx = this.x;
-      let my = this.y;
+    update() {
+      if (mouse.current.x !== null && mouse.current.y !== null) {
+          const dx = mouse.current.x - this.x;
+          const dy = mouse.current.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if(mouse.current.x && mouse.current.y) {
-          mx = mouse.current.x;
-          my = mouse.current.y;
+          if (dist < 50) {
+              this.alpha = Math.min(1, this.alpha + 0.05);
+          } else {
+              this.alpha = Math.max(0, this.alpha - 0.01);
+          }
+          
+          if(dist > 0) {
+             this.x += dx / (ease / this.size);
+             this.y += dy / (ease / this.size);
+          }
+
+      } else {
+          this.alpha = Math.max(0, this.alpha - 0.01);
       }
-      
-      let dx = this.x - mx;
-      let dy = this.y - my;
-      let dist = Math.sqrt(dx * dx + dy * dy);
-      let a = -1 / (dist / this.magnetism);
-      
-      this.translateX += dx * a;
-      this.translateY += dy * a;
-
-      this.x += (this.translateX + this.dx - this.x) / (staticity / this.radius);
-      this.y += (this.translateY + this.dy - this.y) / (staticity / this.radius);
-
-      if (this.x < 0 || this.x > w) this.dx = -this.dx;
-      if (this.y < 0 || this.y > h) this.dy = -this.dy;
-      if (this.alpha < this.targetAlpha) this.alpha += 0.01;
-
-      this.draw();
     }
   }
 
   const drawParticles = () => {
-    if(!context.current) return;
-    context.current.clearRect(0, 0, canvasSize.current.w, canvasSize.current.h);
+    circles.current = [];
     for (let i = 0; i < quantity; i++) {
       circles.current.push(new Circle());
     }
-    draw();
   };
   
-  const draw = () => {
-      if(!context.current) return;
-      const { w, h } = canvasSize.current;
-      context.current.clearRect(0, 0, w, h);
-      circles.current.forEach(circle => circle.move());
-  }
-
   const animate = () => {
-    draw();
+    if (!context.current) return;
+    const { w, h } = canvasSize.current;
+    context.current.clearRect(0, 0, w, h);
+    
+    circles.current.forEach(circle => {
+        circle.update();
+        circle.draw();
+    });
+
     requestAnimationFrame(animate);
   };
   
+  if (isMobile) return null;
 
   return (
-    <div className={cn("w-full h-full", className)} ref={canvasContainerRef}>
+    <div className={cn("pointer-events-none", className)}>
       <canvas ref={canvasRef} />
     </div>
   );
 }
-
-    
