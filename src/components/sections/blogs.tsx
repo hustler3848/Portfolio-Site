@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const blogData = [
   {
@@ -13,7 +14,7 @@ const blogData = [
     date: "2024-05-15",
     readTime: "5 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    slug: "art-of-minimalism",
+    url: "#!",
     dataAiHint: "minimalist design",
   },
   {
@@ -23,7 +24,7 @@ const blogData = [
     date: "2024-04-22",
     readTime: "8 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    slug: "framer-motion-advanced",
+    url: "#!",
     dataAiHint: "abstract animation",
   },
   {
@@ -33,7 +34,7 @@ const blogData = [
     date: "2024-03-30",
     readTime: "12 min read",
     imageUrl: "https://placehold.co/600x400.png",
-    slug: "design-system-tailwind",
+    url: "#!",
     dataAiHint: "design system",
   },
 ];
@@ -73,7 +74,7 @@ export function Blogs() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogData.map((post) => (
             <motion.div key={post.id} variants={itemVariants}>
-              <a href={`/blog/${post.slug}`} className="group block">
+              <a href={post.url} target="_blank" rel="noopener noreferrer" className="group block">
                 <div className="relative bg-card rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-primary/20 group-hover:shadow-2xl group-hover:-translate-y-2">
                   <div className="overflow-hidden">
                     <Image
@@ -108,6 +109,14 @@ export function Blogs() {
             </motion.div>
           ))}
         </div>
+        <motion.div 
+            className="text-center mt-12"
+            variants={itemVariants}
+        >
+          <Button size="lg" asChild className="blob-link">
+            <a href="#!" target="_blank" rel="noopener noreferrer">View More</a>
+          </Button>
+        </motion.div>
       </motion.div>
     </section>
   );
