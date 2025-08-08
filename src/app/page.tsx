@@ -64,8 +64,8 @@ export default function Home() {
       <Header />
       <main className="flex flex-col">
         <Intro />
-        <Projects />
         <About />
+        <Projects />
         <Contact />
       </main>
       <Footer />

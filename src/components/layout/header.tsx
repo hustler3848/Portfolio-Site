@@ -9,8 +9,8 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { useTheme } from "../providers/theme-provider";
 
 const navLinks = [
-  { name: "Projects", href: "#projects" },
   { name: "About", href: "#about" },
+  { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ];
 
