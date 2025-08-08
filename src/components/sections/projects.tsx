@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const projectsData = [
   {
@@ -39,6 +40,7 @@ const projectsData = [
 export function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mouseY, setMouseY] = useState(0);
+  const isMobile = useIsMobile();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     setMouseY(e.clientY);
@@ -49,25 +51,69 @@ export function Projects() {
     enter: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
     exit: { opacity: 0, scale: 0.8, y: 0, transition: { duration: 0.2, ease: 'easeIn' } },
   };
-
-  return (
-    <section id="projects" className="py-24 relative overflow-hidden bg-background">
+  
+  const headingAndGradient = (
+    <>
       <div 
         className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
       />
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2 mb-12"
-        >
-          <span className="w-3 h-3 bg-primary rounded-full"></span>
-          <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
-        </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-center gap-2 mb-12"
+      >
+        <span className="w-3 h-3 bg-primary rounded-full"></span>
+        <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
+      </motion.div>
+    </>
+  );
 
+  if (isMobile) {
+    return (
+      <section id="projects" className="py-24 relative overflow-hidden bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          {headingAndGradient}
+          <div className="grid grid-cols-1 gap-8">
+            {projectsData.map((project, index) => (
+              <motion.div 
+                key={project.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-card rounded-lg overflow-hidden shadow-lg"
+              >
+                <div className="relative aspect-video">
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{ objectFit: 'cover' }}
+                    data-ai-hint={project.dataAiHint}
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-headline text-2xl font-bold">{project.title}</h3>
+                  <div className="mt-2 text-sm text-muted-foreground">
+                    <p className="font-semibold">{project.client}</p>
+                    <p>{project.category}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id="projects" className="py-24 relative overflow-hidden bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {headingAndGradient}
         <div className="relative border-b border-border" onMouseMove={handleMouseMove}>
           <AnimatePresence>
             {hoveredIndex !== null && (
