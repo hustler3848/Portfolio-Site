@@ -20,8 +20,8 @@ export function Intro() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.5, // This delay starts after the preloader finishes
+        staggerChildren: 0.3,
+        delayChildren: 0.8,
       },
     },
   };
@@ -32,7 +32,7 @@ export function Intro() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
+        duration: 1,
         ease: "easeOut",
       },
     },
@@ -56,9 +56,8 @@ export function Intro() {
           I build beautiful, functional, and user-centric web applications.
         </motion.p>
         <motion.div variants={itemVariants}>
-          <Button size="lg" onClick={() => scrollTo('#projects')} className="group">
-            <span className="absolute inset-0 w-full h-full bg-primary/20 rounded-full blur-3xl group-hover:blur-4xl transition-all duration-500"></span>
-            <span className="relative">View My Work</span>
+          <Button size="lg" onClick={() => scrollTo('#projects')}>
+            View My Work
           </Button>
         </motion.div>
       </motion.div>
