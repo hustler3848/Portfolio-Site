@@ -86,7 +86,7 @@ export function Header() {
         <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('#hero');}} className="font-headline text-2xl font-bold text-foreground transition-colors hover:text-primary">
           Darshan
         </a>
-        <nav className="hidden items-center gap-2 md:flex rounded-full px-2">
+        <nav className="hidden items-center gap-2 md:flex">
           {navLinks.map((link) => (
             <Button
               key={link.name}
