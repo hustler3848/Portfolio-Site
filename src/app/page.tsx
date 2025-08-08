@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Intro } from "@/components/sections/intro";
@@ -45,23 +45,37 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [keySequence]);
+  
+  const mainVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.5 } }
+  }
 
   return (
     <SmoothScroll>
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
-      <CustomCursor />
-      <Particles className="fixed inset-0 -z-10" quantity={150} celebration={showEasterEgg} />
-      <Header />
-      <main className="flex flex-col">
-        <Intro />
-        <About />
-        <Projects />
-        <Blogs />
-        <Contact />
-      </main>
-      <Footer />
+      
+      {!isLoading && (
+        <motion.div
+            variants={mainVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <CustomCursor />
+            <Particles className="fixed inset-0 -z-10" quantity={150} celebration={showEasterEgg} />
+            <Header />
+            <main className="flex flex-col">
+                <Intro />
+                <About />
+                <Projects />
+                <Blogs />
+                <Contact />
+            </main>
+            <Footer />
+        </motion.div>
+      )}
     </SmoothScroll>
   );
 }
