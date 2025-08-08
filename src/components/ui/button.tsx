@@ -48,10 +48,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        <>
+        <span className="relative z-10 flex items-center gap-2">
           {children}
-          <span className="absolute inset-0 bg-background/20 rounded-md scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
-        </>
+        </span>
+        <span className="absolute inset-0 bg-background/20 rounded-md scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
       </Comp>
     )
   }
