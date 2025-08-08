@@ -53,7 +53,7 @@ export function Projects() {
   };
   
   const headingAndGradient = (
-    <>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div 
         className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
       />
@@ -67,14 +67,26 @@ export function Projects() {
         <span className="w-3 h-3 bg-primary rounded-full"></span>
         <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
       </motion.div>
-    </>
+    </div>
   );
 
   if (isMobile) {
     return (
       <section id="projects" className="py-24 relative overflow-hidden bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          {headingAndGradient}
+          <div 
+            className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
+          />
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-2 mb-12"
+          >
+            <span className="w-3 h-3 bg-primary rounded-full"></span>
+            <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
+          </motion.div>
           <div className="grid grid-cols-1 gap-8">
             {projectsData.map((project, index) => (
               <motion.div 
@@ -112,57 +124,57 @@ export function Projects() {
 
   return (
     <section id="projects" className="py-24 relative overflow-hidden bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {headingAndGradient}
-        <div className="relative border-b border-border" onMouseMove={handleMouseMove}>
-          <AnimatePresence>
-            {hoveredIndex !== null && (
-              <motion.div
-                variants={imageVariants}
-                initial="initial"
-                animate="enter"
-                exit="exit"
-                className="absolute left-1/2 -translate-x-1/2 w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
-                style={{ top: mouseY - 200 }}
-              >
-                <Image
-                  src={projectsData[hoveredIndex].imageUrl}
-                  alt={projectsData[hoveredIndex].title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  data-ai-hint={projectsData[hoveredIndex].dataAiHint}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {projectsData.map((project, index) => (
-            <div
-              key={project.title}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative"
+      {headingAndGradient}
+      <div className="relative border-b border-border" onMouseMove={handleMouseMove}>
+        <AnimatePresence>
+          {hoveredIndex !== null && (
+            <motion.div
+              variants={imageVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="absolute left-1/2 -translate-x-1/2 w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
+              style={{ top: mouseY - 200 }}
             >
-              <div
-                className={
-                  "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
-                }
-                style={{
-                  clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
-                }}
+              <Image
+                src={projectsData[hoveredIndex].imageUrl}
+                alt={projectsData[hoveredIndex].title}
+                fill
+                style={{ objectFit: 'cover' }}
+                data-ai-hint={projectsData[hoveredIndex].dataAiHint}
               />
-              <a href="#" className="block relative">
-                <div className="flex justify-between items-center py-8 px-4 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
-                  <h3 className="font-headline text-3xl md:text-5xl font-bold">{project.title}</h3>
-                  <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
-                    <p className="font-semibold">{project.client}</p>
-                    <p>{project.category}</p>
-                  </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {projectsData.map((project, index) => (
+          <div
+            key={project.title}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="group relative"
+          >
+            <div
+              className={
+                "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
+              }
+              style={{
+                clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
+              }}
+            />
+            <a href="#" className="block relative">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center py-8 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
+                    <h3 className="font-headline text-3xl md:text-5xl font-bold">{project.title}</h3>
+                    <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
+                      <p className="font-semibold">{project.client}</p>
+                      <p>{project.category}</p>
+                    </div>
                 </div>
-              </a>
-            </div>
-          ))}
-        </div>
+              </div>
+            </a>
+          </div>
+        ))}
       </div>
     </section>
   );
