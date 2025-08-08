@@ -102,95 +102,97 @@ export function Contact() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="max-w-md mx-auto mt-8 bg-card/50 backdrop-blur-sm p-6 sm:p-8 rounded-xl shadow-2xl"
+          className="max-w-md mx-auto mt-8 bg-card/50 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden"
         >
           <AnimatePresence>
             {currentStep !== 'submitted' ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <Progress value={progress} className="mb-6 h-2" />
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  <AnimatePresence mode="wait">
-                    {steps.map((step, index) =>
-                      currentStep === step && (
-                        <motion.div
-                          key={step}
-                          initial={{ opacity: 0, x: -30 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 30 }}
-                          transition={{ duration: 0.4, ease: "easeInOut" }}
-                        >
-                           {step === "name" && (
-                            <AnimatedInput form={form} name="name" label="Name" Icon={User} onEnterPress={handleNext}/>
-                          )}
-                          {step === "email" && (
-                            <AnimatedInput form={form} name="email" label="Email" Icon={Mail} onEnterPress={handleNext}/>
-                          )}
-                          {step === "message" && (
-                            <AnimatedInput form={form} name="message" label="Message" Icon={MessageSquare} type="textarea"/>
-                          )}
-                        </motion.div>
-                      )
-                    )}
-                  </AnimatePresence>
+                <Progress value={progress} className="mb-6 h-2 rounded-none" />
+                <div className="p-6 sm:p-8 pt-0">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <AnimatePresence mode="wait">
+                      {steps.map((step, index) =>
+                        currentStep === step && (
+                          <motion.div
+                            key={step}
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 30 }}
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                          >
+                            {step === "name" && (
+                              <AnimatedInput form={form} name="name" label="Name" Icon={User} onEnterPress={handleNext}/>
+                            )}
+                            {step === "email" && (
+                              <AnimatedInput form={form} name="email" label="Email" Icon={Mail} onEnterPress={handleNext}/>
+                            )}
+                            {step === "message" && (
+                              <AnimatedInput form={form} name="message" label="Message" Icon={MessageSquare} type="textarea"/>
+                            )}
+                          </motion.div>
+                        )
+                      )}
+                    </AnimatePresence>
 
-                  <div className="flex justify-end">
-                    {currentStep === "message" ? (
-                      <Button
-                        type="submit"
-                        size="lg"
-                        disabled={formStatus === 'submitting'}
-                        className="overflow-hidden relative"
-                      >
-                         <AnimatePresence mode="wait" initial={false}>
-                          {formStatus === 'submitting' && (
-                            <motion.div
-                              key="submitting"
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: -20, opacity: 0 }}
-                              className="flex items-center"
-                            >
-                              <Loader2 className="animate-spin mr-2"/> Sending...
-                            </motion.div>
-                          )}
-                           {formStatus === 'success' && (
-                            <motion.div
-                              key="success"
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: -20, opacity: 0 }}
-                              className="flex items-center"
-                            >
-                              <Check className="mr-2"/> Sent!
-                            </motion.div>
-                          )}
-                           {formStatus === 'idle' && (
-                             <motion.div
-                              key="idle"
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: -20, opacity: 0 }}
-                              className="flex items-center"
-                            >
-                              <Send className="mr-2"/> Send Message
-                            </motion.div>
-                           )}
-                        </AnimatePresence>
-                      </Button>
-                    ) : (
-                      <Button type="button" size="lg" onClick={handleNext}>
-                        Next
-                      </Button>
-                    )}
-                  </div>
-                </form>
+                    <div className="flex justify-end">
+                      {currentStep === "message" ? (
+                        <Button
+                          type="submit"
+                          size="lg"
+                          disabled={formStatus === 'submitting'}
+                          className="overflow-hidden relative"
+                        >
+                          <AnimatePresence mode="wait" initial={false}>
+                            {formStatus === 'submitting' && (
+                              <motion.div
+                                key="submitting"
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -20, opacity: 0 }}
+                                className="flex items-center"
+                              >
+                                <Loader2 className="animate-spin mr-2"/> Sending...
+                              </motion.div>
+                            )}
+                            {formStatus === 'success' && (
+                              <motion.div
+                                key="success"
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -20, opacity: 0 }}
+                                className="flex items-center"
+                              >
+                                <Check className="mr-2"/> Sent!
+                              </motion.div>
+                            )}
+                            {formStatus === 'idle' && (
+                              <motion.div
+                                key="idle"
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -20, opacity: 0 }}
+                                className="flex items-center"
+                              >
+                                <Send className="mr-2"/> Send Message
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </Button>
+                      ) : (
+                        <Button type="button" size="lg" onClick={handleNext}>
+                          Next
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </div>
               </motion.div>
             ) : (
               <motion.div
                 key="submitted"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
+                className="text-center py-8 p-6 sm:p-8"
               >
                 <motion.div initial={{scale:0}} animate={{scale:1, transition:{delay:0.2, type:'spring'}}}>
                   <Check className="mx-auto h-16 w-16 rounded-full bg-primary/20 text-primary p-2" />
