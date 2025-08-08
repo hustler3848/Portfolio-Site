@@ -53,30 +53,6 @@
     --noise-bg: none;
   }
   
-  .theme-cyberpunk {
-    --background: 328 100% 25%; /* fallback, gradient is king */
-    --foreground: 127 100% 82%; /* #a3ffae */
-    --card: 265 96% 12%;
-    --card-foreground: 127 100% 82%;
-    --popover: 265 96% 12%;
-    --popover-foreground: 127 100% 82%;
-    --primary: 328 100% 50%; /* #ff007f */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 265 96% 18%;
-    --secondary-foreground: 127 100% 82%;
-    --muted: 265 96% 18%;
-    --muted-foreground: 127 100% 70%;
-    --accent: 328 100% 50%; /* #ff007f */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 265 96% 22%;
-    --input: 265 96% 18%;
-    --ring: 328 100% 50%;
-    --bg-image: linear-gradient(180deg, #2e026d 0%, #000000 100%);
-    --noise-bg: none;
-  }
-
   .theme-minimal-beige {
     --background: 37 33% 95%; /* #f5efe7 */
     --foreground: 0 0% 17%; /* #2b2b2b */
@@ -105,7 +81,6 @@
 @layer base {
   * {
     @apply border-border;
-    transition: background-color 0.5s ease, color 0.5s ease;
   }
   body {
     @apply bg-background text-foreground;

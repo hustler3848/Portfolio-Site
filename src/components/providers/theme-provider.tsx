@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import type { ReactNode } from 'react';
 
-type Theme = "theme-dark" | "theme-light" | "theme-cyberpunk" | "theme-minimal-beige";
+type Theme = "theme-dark" | "theme-light" | "theme-minimal-beige";
 
 interface ThemeContextType {
   theme: Theme;
@@ -42,7 +42,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const themes = [
     { name: 'Default', value: 'theme-dark' as Theme },
     { name: 'Light', value: 'theme-light' as Theme },
-    { name: 'Cyberpunk', value: 'theme-cyberpunk' as Theme },
     { name: 'Beige', value: 'theme-minimal-beige' as Theme },
   ];
 

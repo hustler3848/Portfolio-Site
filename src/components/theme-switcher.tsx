@@ -3,7 +3,7 @@
 
 import { useTheme } from "@/components/providers/theme-provider";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Zap, Coffee } from "lucide-react";
+import { Sun, Moon, Coffee } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function ThemeSwitcher() {
@@ -19,7 +19,6 @@ export function ThemeSwitcher() {
     switch(theme) {
       case 'theme-dark': return <Moon />;
       case 'theme-light': return <Sun />;
-      case 'theme-cyberpunk': return <Zap />;
       case 'theme-minimal-beige': return <Coffee />;
       default: return <Moon />;
     }

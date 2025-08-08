@@ -9,7 +9,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const themeColors = {
   'theme-dark': 'hsl(0 0% 96%)', // foreground
   'theme-light': 'hsl(0 0% 10%)', // foreground
-  'theme-cyberpunk': 'hsl(127 100% 82%)', // foreground
   'theme-minimal-beige': 'hsl(0 0% 17%)', // foreground
   'project-hover-color': 'hsl(var(--primary))'
 };
