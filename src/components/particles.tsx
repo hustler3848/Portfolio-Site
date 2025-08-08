@@ -15,7 +15,7 @@ interface ParticlesProps {
 export function Particles({
   className,
   quantity = 30,
-  ease = 50,
+  ease = 20,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
