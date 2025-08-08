@@ -12,6 +12,7 @@ import { Contact } from "@/components/sections/contact";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { Particles } from "@/components/particles";
 import { Preloader } from "@/components/preloader";
+import { CustomCursor } from "@/components/custom-cursor";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +33,7 @@ export default function Home() {
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
+      <CustomCursor />
       <Particles className="fixed inset-0 -z-10" />
       <Header />
       <main className="flex flex-col">

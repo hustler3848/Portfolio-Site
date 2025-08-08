@@ -4,18 +4,21 @@
 import { useState, useEffect } from "react";
 import { motion, useSpring } from "framer-motion";
 import { useTheme } from "@/components/providers/theme-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const { theme } = useTheme(); // Will get theme from context
   const [accentColor, setAccentColor] = useState('hsl(var(--primary))');
+  const isMobile = useIsMobile();
 
   const springConfig = { damping: 25, stiffness: 400, mass: 0.1 };
   const cursorX = useSpring(position.x, springConfig);
   const cursorY = useSpring(position.y, springConfig);
 
   useEffect(() => {
+    if (isMobile) return;
     // Function to get the computed accent color
     const updateAccentColor = () => {
       if (typeof window !== 'undefined') {
@@ -62,7 +65,7 @@ export function CustomCursor() {
       document.removeEventListener('mouseout', handleMouseOut);
       observer.disconnect();
     };
-  }, [theme]); // Rerun effect when theme changes
+  }, [theme, isMobile]); // Rerun effect when theme changes or isMobile changes
 
   const variants = {
     default: {
@@ -87,6 +90,10 @@ export function CustomCursor() {
       translateY: "-50%",
     },
   };
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <motion.div

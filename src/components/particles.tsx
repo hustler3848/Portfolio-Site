@@ -14,8 +14,8 @@ interface ParticlesProps {
 
 export function Particles({
   className,
-  quantity = 50,
-  ease = 2,
+  quantity = 100,
+  ease = 50,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -97,7 +97,7 @@ export function Particles({
       const { w, h } = canvasSize.current;
       this.x = Math.random() * w;
       this.y = Math.random() * h;
-      this.size = Math.random() * 8 + 4; // Increased size further
+      this.size = Math.random() * 2 + 1;
       this.alpha = 0;
       this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
       const hue = Math.floor(Math.random() * 360);
@@ -120,9 +120,9 @@ export function Particles({
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 150) {
-              this.alpha = Math.min(1, this.alpha + 0.15);
+              this.alpha = Math.min(1, this.alpha + 0.05);
           } else {
-              this.alpha = Math.max(0, this.alpha - 0.04);
+              this.alpha = Math.max(0, this.alpha - 0.01);
           }
           
           if (dist > 0) {
@@ -131,7 +131,7 @@ export function Particles({
           }
 
       } else {
-          this.alpha = Math.max(0, this.alpha - 0.04);
+          this.alpha = Math.max(0, this.alpha - 0.01);
       }
     }
   }

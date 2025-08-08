@@ -6,6 +6,12 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
+    // Return early if window is not defined (for SSR)
+    if (typeof window === 'undefined') {
+      setIsMobile(true); // Default to mobile on server
+      return;
+    }
+
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
     const onChange = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
@@ -15,5 +21,5 @@ export function useIsMobile() {
     return () => mql.removeEventListener("change", onChange)
   }, [])
 
-  return !!isMobile
+  return isMobile === undefined ? true : isMobile;
 }
