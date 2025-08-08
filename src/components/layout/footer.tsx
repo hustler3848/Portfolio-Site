@@ -59,7 +59,7 @@ export function Footer() {
                     whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   >
-                    <Button variant="outline" size="icon" className="w-14 h-14 rounded-full border-2" asChild>
+                    <Button variant="outline" size="icon" className="w-14 h-14 rounded-full border-2 blob-btn-icon" asChild>
                       <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
                         <social.icon className="h-6 w-6" />
                       </a>

@@ -56,7 +56,7 @@ export function Intro() {
           I build beautiful, functional, and user-centric web applications.
         </motion.p>
         <motion.div variants={itemVariants}>
-          <Button size="lg" onClick={() => scrollTo('#projects')}>
+          <Button size="lg" onClick={() => scrollTo('#projects')} className="blob-link">
             View My Work
           </Button>
         </motion.div>

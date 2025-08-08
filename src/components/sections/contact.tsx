@@ -137,7 +137,7 @@ export function Contact() {
                             type="submit"
                             size="lg"
                             disabled={formStatus === 'submitting'}
-                            className="overflow-hidden relative"
+                            className="overflow-hidden relative blob-link"
                           >
                             <AnimatePresence mode="wait" initial={false}>
                               {formStatus === 'submitting' && (
@@ -176,7 +176,7 @@ export function Contact() {
                             </AnimatePresence>
                           </Button>
                         ) : (
-                          <Button type="button" size="lg" onClick={handleNext}>
+                          <Button type="button" size="lg" onClick={handleNext} className="blob-link">
                             Next
                           </Button>
                         )}
