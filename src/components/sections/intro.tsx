@@ -27,8 +27,8 @@ export function Intro() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.2,
+        delayChildren: 0.5,
       },
     },
   };
@@ -39,7 +39,7 @@ export function Intro() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
+        duration: 0.8,
         ease: "easeOut",
       },
     },
@@ -51,7 +51,7 @@ export function Intro() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 1.0,
         ease: "easeOut",
       },
     },
