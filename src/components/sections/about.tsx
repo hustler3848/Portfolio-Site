@@ -62,7 +62,7 @@ export function About() {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
                 <div className="relative w-full h-full rounded-full overflow-hidden shadow-lg border-4 border-background">
                   <Image
-                    src="https://placehold.co/400x400.png"
+                    src="/images/profile.png"
                     alt="Darshan"
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
