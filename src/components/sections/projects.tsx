@@ -4,7 +4,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 const projectsData = [
   {
@@ -113,14 +112,6 @@ export function Projects() {
                     <p className="font-semibold">{project.client}</p>
                     <p>{project.category}</p>
                   </div>
-                  <motion.div
-                    className="absolute right-8 top-1/2 -translate-y-1/2"
-                    initial={{x: -20, opacity: 0}}
-                    animate={{x: hoveredIndex === index ? 0 : -20, opacity: hoveredIndex === index ? 1 : 0}}
-                    transition={{duration: 0.3, ease: 'easeOut'}}
-                  >
-                     <ArrowRight className="w-8 h-8"/>
-                  </motion.div>
                 </div>
               </a>
             </div>
