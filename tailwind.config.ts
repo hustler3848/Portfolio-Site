@@ -11,7 +11,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['"Bricolage Grotesque"', 'sans-serif'],
+        body: ['"Familjen Grotesk"', 'sans-serif'],
         headline: ['"Bricolage Grotesque"', 'serif'],
         code: ['monospace'],
       },
