@@ -2,11 +2,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation, useScroll } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { useTheme } from "../providers/theme-provider";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -18,53 +17,24 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const controls = useAnimation();
-  const { theme } = useTheme();
-
-  const updateHeaderStyle = (scrolled: boolean) => {
-    if (typeof window !== 'undefined') {
-        const style = getComputedStyle(document.body);
-        const backgroundHslString = style.getPropertyValue('--background').trim();
-        
-        const hslMatch = backgroundHslString.match(/(\d{1,3})(?:(?:\s,?\s*)|,)(\d{1,3})%?(?:(?:\s,?\s*)|,)(\d{1,3})%?/);
-        if(!hslMatch) return;
-        const [h, s, l] = [hslMatch[1], hslMatch[2], hslMatch[3]];
-
-        const backgroundStart = `hsla(${h}, ${s}%, ${l}%, 0)`;
-        const backgroundEnd = `hsla(${h}, ${s}%, ${l}%, 0.8)`;
-        
-        if (scrolled) {
-          controls.start({
-            backgroundColor: backgroundEnd,
-            backdropFilter: "blur(12px)",
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          });
-        } else {
-          controls.start({
-            backgroundColor: backgroundStart,
-            backdropFilter: "blur(4px)",
-            boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
-          });
-        }
-    }
-  }
+  const { scrollY } = useScroll();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY > 10;
-      if (scrolled !== isScrolled) {
-        setIsScrolled(scrolled);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isScrolled]);
-
-  useEffect(() => {
-    updateHeaderStyle(isScrolled);
-  }, [theme, isScrolled, controls]);
+    return scrollY.on('change', (latest) => {
+        setIsScrolled(latest > 10);
+    });
+  }, [scrollY]);
   
+  useEffect(() => {
+    controls.start({
+        backgroundColor: isScrolled ? "hsl(var(--background) / 0.8)" : "hsl(var(--background) / 0)",
+        backdropFilter: isScrolled ? "blur(12px)" : "blur(0px)",
+        boxShadow: isScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)" : "0 0 0 rgba(0, 0, 0, 0)",
+        transition: { duration: 0.5, ease: "easeInOut" }
+    });
+  }, [isScrolled, controls]);
+
+
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
     if(element) {
@@ -79,7 +49,6 @@ export function Header() {
   return (
     <motion.header
       animate={controls}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed top-0 left-0 right-0 z-50 w-full"
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
