@@ -1,0 +1,115 @@
+
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
+
+const blogData = [
+  {
+    id: 1,
+    title: "The Art of Minimalism in Web Design",
+    excerpt: "Discover how simplifying your design can lead to more engaging and effective user experiences. Less is often more.",
+    date: "2024-05-15",
+    readTime: "5 min read",
+    imageUrl: "https://placehold.co/600x400.png",
+    slug: "art-of-minimalism",
+    dataAiHint: "minimalist design",
+  },
+  {
+    id: 2,
+    title: "Framer Motion: Advanced Animation Techniques",
+    excerpt: "A deep dive into creating complex, performant animations that bring your React applications to life.",
+    date: "2024-04-22",
+    readTime: "8 min read",
+    imageUrl: "https://placehold.co/600x400.png",
+    slug: "framer-motion-advanced",
+    dataAiHint: "abstract animation",
+  },
+  {
+    id: 3,
+    title: "Building a Design System with Tailwind CSS",
+    excerpt: "Learn the step-by-step process of creating a scalable and maintainable design system using the power of Tailwind CSS.",
+    date: "2024-03-30",
+    readTime: "12 min read",
+    imageUrl: "https://placehold.co/600x400.png",
+    slug: "design-system-tailwind",
+    dataAiHint: "design system",
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, delayChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+export function Blogs() {
+  return (
+    <section id="blogs" className="py-24 bg-secondary text-secondary-foreground">
+      <motion.div
+        className="container mx-auto px-4 sm:px-6 lg:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <motion.div className="text-center mb-12" variants={itemVariants}>
+          <h2 className="mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
+            From My Blog
+          </h2>
+          <p className="text-base md:text-lg text-secondary-foreground/80 max-w-2xl mx-auto">
+            A collection of my thoughts on design, development, and the tech world.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogData.map((post) => (
+            <motion.div key={post.id} variants={itemVariants}>
+              <a href={`/blog/${post.slug}`} className="group block">
+                <div className="relative bg-card rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-primary/20 group-hover:shadow-2xl group-hover:-translate-y-2">
+                  <div className="overflow-hidden">
+                    <Image
+                      src={post.imageUrl}
+                      alt={post.title}
+                      width={600}
+                      height={400}
+                      className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                      data-ai-hint={post.dataAiHint}
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                       <div className="flex items-center gap-1.5">
+                           <Calendar className="w-4 h-4"/>
+                           <span>{post.date}</span>
+                       </div>
+                       <div className="flex items-center gap-1.5">
+                           <Clock className="w-4 h-4"/>
+                           <span>{post.readTime}</span>
+                       </div>
+                    </div>
+                    <h3 className="font-headline text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
+                    <p className="text-secondary-foreground/80 line-clamp-3 mb-4">{post.excerpt}</p>
+                    <div className="inline-flex items-center font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300">
+                      Read More
+                      <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+

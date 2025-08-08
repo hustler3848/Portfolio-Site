@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -11,6 +11,7 @@ import { useTheme } from "@/components/providers/theme-provider";
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Work", href: "#projects" },
+  { name: "Blog", href: "#blogs"},
   { name: "Contact", href: "#contact" },
 ];
 
@@ -18,13 +19,11 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
-  const { theme } = useTheme(); // Re-render on theme change
+  const { theme } = useTheme();
 
-  useEffect(() => {
-    return scrollY.on('change', (latest) => {
-        setIsScrolled(latest > 10);
-    });
-  }, [scrollY]);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 10);
+  });
 
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
@@ -35,28 +34,28 @@ export function Header() {
     }
     setIsOpen(false);
   };
-
+  
   const headerVariants = {
     scrolled: { 
       backgroundColor: "hsl(var(--background) / 0.8)",
       backdropFilter: "blur(12px)",
       boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      transition: { duration: 0.5, ease: "easeInOut" }
     },
     top: { 
       backgroundColor: "hsl(var(--background) / 0)",
       backdropFilter: "blur(0px)",
       boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
+      transition: { duration: 0.5, ease: "easeInOut" }
     }
   };
 
-
   return (
     <motion.header
-      key={theme} // Force re-render on theme change
+      key={theme} 
       initial={isScrolled ? "scrolled" : "top"}
       animate={isScrolled ? "scrolled" : "top"}
       variants={headerVariants}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed top-0 left-0 right-0 z-50 w-full"
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">

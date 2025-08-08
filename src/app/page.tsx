@@ -13,6 +13,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import { Particles } from "@/components/particles";
 import { Preloader } from "@/components/preloader";
 import { CustomCursor } from "@/components/custom-cursor";
+import { Blogs } from "@/components/sections/blogs";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +58,7 @@ export default function Home() {
         <Intro />
         <About />
         <Projects />
+        <Blogs />
         <Contact />
       </main>
       <Footer />
