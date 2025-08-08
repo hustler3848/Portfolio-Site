@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -61,7 +62,7 @@ export function ProjectCard({ project }: { project: Project }) {
         rotateX,
         transformStyle: "preserve-3d",
       }}
-      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl h-full flex flex-col"
+      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl h-full flex flex-col group"
     >
       <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }} className="p-6 flex flex-col flex-grow">
         <div className="relative aspect-video rounded-md overflow-hidden mb-4" style={{ transform: "translateZ(20px)" }}>
