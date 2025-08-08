@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ArrowUpRight } from "lucide-react";
 
 const projectsData = [
   {
@@ -13,6 +14,7 @@ const projectsData = [
     category: "Web App",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "movie app",
+    liveDemoUrl: "#!",
   },
   {
     title: "CodeSnippr",
@@ -20,6 +22,7 @@ const projectsData = [
     category: "Development Tool",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "code snippet",
+    liveDemoUrl: "#!",
   },
   {
     title: "MindGuard",
@@ -27,6 +30,7 @@ const projectsData = [
     category: "Mental Health",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "mental health",
+    liveDemoUrl: "#!",
   },
   {
     title: "Portfolio V1",
@@ -34,6 +38,7 @@ const projectsData = [
     category: "Portfolio",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "portfolio website",
+    liveDemoUrl: "#!",
   },
 ];
 
@@ -97,23 +102,28 @@ export function Projects() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-card rounded-lg overflow-hidden shadow-lg"
               >
-                <div className="relative aspect-video">
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    style={{ objectFit: 'cover' }}
-                    data-ai-hint={project.dataAiHint}
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-headline text-2xl font-bold">{project.title}</h3>
-                  <div className="mt-2 text-sm text-muted-foreground">
-                    <p className="font-semibold">{project.client}</p>
-                    <p>{project.category}</p>
+                <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
+                  <div className="relative aspect-video">
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{ objectFit: 'cover' }}
+                      data-ai-hint={project.dataAiHint}
+                    />
                   </div>
-                </div>
+                  <div className="p-6">
+                    <h3 className="font-headline text-2xl font-bold flex items-start">
+                      {project.title}
+                      <ArrowUpRight className="h-5 w-5 ml-2 mt-1 shrink-0" />
+                    </h3>
+                    <div className="mt-2 text-sm text-muted-foreground">
+                      <p className="font-semibold">{project.client}</p>
+                      <p>{project.category}</p>
+                    </div>
+                  </div>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -162,10 +172,13 @@ export function Projects() {
                 clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
               }}
             />
-            <a href="#" className="block relative">
+            <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center py-8 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
-                    <h3 className="font-headline text-3xl md:text-5xl font-bold">{project.title}</h3>
+                    <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
+                      {project.title}
+                      <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                    </h3>
                     <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
                       <p className="font-semibold">{project.client}</p>
                       <p>{project.category}</p>
