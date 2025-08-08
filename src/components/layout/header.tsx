@@ -24,8 +24,12 @@ export function Header() {
     if (typeof window !== 'undefined') {
         const style = getComputedStyle(document.body);
         const backgroundHslString = style.getPropertyValue('--background').trim();
-        const [h, s, l] = backgroundHslString.split(" ").map(v => parseFloat(v));
         
+        // Use a regex to handle hsl and h s l formats
+        const hslMatch = backgroundHslString.match(/(\d{1,3})(?:(?:\s,?\s*)|,)(\d{1,3})%?(?:(?:\s,?\s*)|,)(\d{1,3})%?/);
+        if(!hslMatch) return;
+        const [h, s, l] = [hslMatch[1], hslMatch[2], hslMatch[3]];
+
         const backgroundStart = `hsla(${h}, ${s}%, ${l}%, 0)`;
         const backgroundEnd = `hsla(${h}, ${s}%, ${l}%, 0.8)`;
         
@@ -48,14 +52,15 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 10;
-      setIsScrolled(scrolled);
-      updateHeaderStyle(scrolled);
+      if (scrolled !== isScrolled) {
+        setIsScrolled(scrolled);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isScrolled]);
 
   useEffect(() => {
     updateHeaderStyle(isScrolled);
