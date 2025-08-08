@@ -9,12 +9,12 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      body: ['"Familjen Grotesk"', 'sans-serif'],
+      headline: ['"Bricolage Grotesque"', 'serif'],
+      code: ['monospace'],
+    },
     extend: {
-      fontFamily: {
-        body: ['"Familjen Grotesk"', 'sans-serif'],
-        headline: ['"Bricolage Grotesque"', 'serif'],
-        code: ['monospace'],
-      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
