@@ -83,6 +83,9 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
+        {currentStep !== 'submitted' && (
+             <Progress value={progress} className="absolute top-0 h-2 rounded-none" />
+        )}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -107,8 +110,7 @@ export function Contact() {
           <AnimatePresence>
             {currentStep !== 'submitted' ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <Progress value={progress} className="mb-6 h-2 rounded-none" />
-                <div className="p-6 sm:p-8 pt-0">
+                <div className="p-6 sm:p-8">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <AnimatePresence mode="wait">
                       {steps.map((step, index) =>
