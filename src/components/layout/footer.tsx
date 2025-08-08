@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Github, Linkedin, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 const socialLinks = [
   { name: "GitHub", icon: Github, url: "https://github.com/Darshwan" },
   { name: "LinkedIn", icon: Linkedin, url: "https://www.linkedin.com/in/darshan-lamichhane-0a1b13278/" },
-  { name: "Twitter", icon: Twitter, url: "https://x.com/Darashwan_3848" },
+  { name: "Facebook", icon: Facebook, url: "https://www.facebook.com/darshan.lamichhane.39" },
 ];
 
 export function Footer() {
@@ -37,14 +37,17 @@ export function Footer() {
   };
 
   return (
-    <motion.footer 
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
+    <footer
+      role="contentinfo"
       className="w-full bg-secondary text-secondary-foreground py-16"
     >
-      <div className="container mx-auto flex flex-col items-center justify-center gap-8 px-4 text-center sm:px-6 lg:px-8">
+      <motion.div 
+        className="container mx-auto flex flex-col items-center justify-center gap-8 px-4 text-center sm:px-6 lg:px-8"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.5 }}
+      >
         <motion.div variants={itemVariants}>
           <p className="text-primary font-semibold tracking-wider uppercase">Let's Connect</p>
           <h3 className="text-3xl md:text-4xl font-bold mt-2">Got a project in mind?</h3>
@@ -77,7 +80,7 @@ export function Footer() {
         <motion.p variants={itemVariants} className="text-sm text-muted-foreground mt-4">
           © {new Date().getFullYear()} Darshan. All rights reserved.
         </motion.p>
-      </div>
-    </motion.footer>
+      </motion.div>
+    </footer>
   );
 }
