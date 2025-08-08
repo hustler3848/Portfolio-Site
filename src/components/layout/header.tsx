@@ -10,7 +10,7 @@ import { useTheme } from "../providers/theme-provider";
 
 const navLinks = [
   { name: "About", href: "#about" },
-  { name: "Projects", href: "#projects" },
+  { name: "Work", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -25,7 +25,6 @@ export function Header() {
         const style = getComputedStyle(document.body);
         const backgroundHslString = style.getPropertyValue('--background').trim();
         
-        // Use a regex to handle hsl and h s l formats
         const hslMatch = backgroundHslString.match(/(\d{1,3})(?:(?:\s,?\s*)|,)(\d{1,3})%?(?:(?:\s,?\s*)|,)(\d{1,3})%?/);
         if(!hslMatch) return;
         const [h, s, l] = [hslMatch[1], hslMatch[2], hslMatch[3]];
@@ -87,23 +86,25 @@ export function Header() {
         <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('#hero');}} className="font-headline text-2xl font-bold text-foreground transition-colors hover:text-primary">
           Darshan
         </a>
-        <nav className="hidden items-center gap-4 md:flex">
+        <nav className="hidden items-center gap-2 md:flex border border-border rounded-full px-2">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href);}}
-              className="link-underline text-base font-medium text-foreground transition-colors hover:text-primary/90"
+              className="blob-link text-base font-medium text-foreground transition-colors rounded-full px-4 py-2"
             >
               {link.name}
             </a>
           ))}
-          <ThemeSwitcher />
         </nav>
-        <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+        <div className="flex items-center gap-2">
+            <ThemeSwitcher />
+            <div className="md:hidden">
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+            </div>
         </div>
       </div>
       {isOpen && (
@@ -124,7 +125,6 @@ export function Header() {
                 {link.name}
               </a>
             ))}
-            <ThemeSwitcher />
           </div>
         </motion.div>
       )}
