@@ -6,7 +6,6 @@ import { motion, useAnimation } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { usePathname } from "next/navigation";
 import { useTheme } from "../providers/theme-provider";
 
 const navLinks = [
