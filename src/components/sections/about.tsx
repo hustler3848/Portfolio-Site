@@ -19,8 +19,9 @@ export function About() {
               <Image
                 src="https://placehold.co/400x400.png"
                 alt="Darshan"
-                layout="fill"
-                objectFit="cover"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: "cover" }}
                 data-ai-hint="professional portrait"
                 className="transition-transform duration-500 hover:scale-105"
               />

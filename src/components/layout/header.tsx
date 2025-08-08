@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { usePathname } from "next/navigation";
+import { useTheme } from "../providers/theme-provider";
 
 const navLinks = [
   { name: "Projects", href: "#projects" },
@@ -17,7 +18,7 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const controls = useAnimation();
-  const pathname = usePathname();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,20 +34,25 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    let backgroundHsl;
+    if (typeof window !== 'undefined') {
+        backgroundHsl = getComputedStyle(document.documentElement).getPropertyValue('--background').trim();
+    }
+    
     if (isScrolled) {
       controls.start({
-        backgroundColor: "hsla(var(--background-hsl), 0.8)",
+        backgroundColor: `hsla(${backgroundHsl}, 0.8)`,
         backdropFilter: "blur(12px)",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
       });
     } else {
       controls.start({
-        backgroundColor: "hsla(var(--background-hsl), 0.1)",
+        backgroundColor: `hsla(${backgroundHsl}, 0)`,
         backdropFilter: "blur(4px)",
         boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
       });
     }
-  }, [isScrolled, controls]);
+  }, [isScrolled, controls, theme]);
   
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
@@ -62,7 +68,7 @@ export function Header() {
   return (
     <motion.header
       animate={controls}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed top-0 left-0 right-0 z-50 w-full"
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">

@@ -45,8 +45,8 @@ export function CustomCursor() {
     default: {
       width: 20,
       height: 20,
-      border: `2px solid ${accentColor}`,
-      backgroundColor: "transparent",
+      borderColor: accentColor,
+      backgroundColor: 'rgba(0,0,0,0)',
       x: cursorX,
       y: cursorY,
       translateX: "-50%",
@@ -56,7 +56,7 @@ export function CustomCursor() {
       width: 40,
       height: 40,
       backgroundColor: accentColor,
-      border: `2px solid ${accentColor}`,
+      borderColor: accentColor,
       x: cursorX,
       y: cursorY,
       translateX: "-50%",
@@ -68,8 +68,8 @@ export function CustomCursor() {
     <motion.div
       variants={variants}
       animate={isHovering ? "hover" : "default"}
-      transition={{ type: "spring", ...springConfig }}
-      className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
+      transition={{ type: "spring", ...springConfig, duration: 0.5, ease: "easeInOut" }}
+      className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block border-2"
     />
   );
 }
