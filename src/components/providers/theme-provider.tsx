@@ -10,7 +10,6 @@ interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   themes: { name: string; value: Theme }[];
-  isChanging: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -19,7 +18,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('theme-dark');
   const [isMounted, setIsMounted] = useState(false);
-  const [isChanging, setIsChanging] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') as Theme | null;
@@ -30,18 +28,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (isMounted && !isChanging) {
+    if (isMounted) {
       document.body.className = theme;
       localStorage.setItem('theme', theme);
     }
-  }, [theme, isMounted, isChanging]);
+  }, [theme, isMounted]);
 
-  const setTheme = async (newTheme: Theme) => {
+  const setTheme = (newTheme: Theme) => {
     if (theme === newTheme) return;
-    setIsChanging(true);
-    await new Promise(resolve => setTimeout(resolve, 300));
     setThemeState(newTheme);
-    setIsChanging(false);
   };
 
   const themes = [
@@ -51,7 +46,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     { name: 'Beige', value: 'theme-minimal-beige' as Theme },
   ];
 
-  const value = useMemo(() => ({ theme, setTheme, themes, isChanging }), [theme, isChanging]);
+  const value = useMemo(() => ({ theme, setTheme, themes }), [theme]);
 
   if (!isMounted) {
     // Prevent rendering of children on the server and during initial hydration
