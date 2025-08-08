@@ -13,7 +13,7 @@ const blogData = [
     excerpt: "15 Best Chrome Extensions for Productivity in 2025 (Tested)",
     date: "April 25, 2025",
     readTime: "7 min read",
-    imageUrl: "https://placehold.co/600x400.png",
+    imageUrl: "/images/blog-1.png",
     url: "https://info-glimpse.blogspot.com/2025/04/best-chrome-extensions-for-productivity.html",
     dataAiHint: "chrome extensions productivity",
   },
@@ -23,7 +23,7 @@ const blogData = [
     excerpt: "Let’s face it — juggling lectures, assignments, group projects, and maybe even a part-time job?",
     date: "April 25, 2025",
     readTime: "10 min read",
-    imageUrl: "https://placehold.co/600x400.png",
+    imageUrl: "/images/blog-2.png",
     url: "https://info-glimpse.blogspot.com/2025/04/best-free-productivity-apps-for.html",
     dataAiHint: "student productivity apps",
   },
@@ -33,7 +33,7 @@ const blogData = [
     excerpt: "Writing content doesn’t have to be a long, stressful process anymore. Whether you're a blogger, marketer, or student, ChatGPT can be your powerful sidekick",
     date: "July 22, 2025",
     readTime: "9 min read",
-    imageUrl: "https://placehold.co/600x400.png",
+    imageUrl: "/images/blog-3.png",
     url: "https://info-glimpse.blogspot.com/2025/07/how-to-use-chatgpt-for-content-writing.html",
     dataAiHint: "ai content writing",
   },
@@ -76,13 +76,13 @@ export function Blogs() {
             <motion.div key={post.id} variants={itemVariants}>
               <a href={post.url} target="_blank" rel="noopener noreferrer" className="group block">
                 <div className="relative bg-card rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-primary/20 group-hover:shadow-2xl group-hover:-translate-y-2">
-                  <div className="overflow-hidden">
+                  <div className="overflow-hidden aspect-[1.5/1] relative">
                     <Image
                       src={post.imageUrl}
                       alt={post.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
                       data-ai-hint={post.dataAiHint}
                     />
                   </div>
@@ -114,7 +114,7 @@ export function Blogs() {
             variants={itemVariants}
         >
           <Button size="lg" asChild className="blob-link">
-            <a href="https://info-glimpse.blogspot.com/" target="_blank" rel="noopener noreferrer">View More</a>
+            <a href="#!" target="_blank" rel="noopener noreferrer">View More</a>
           </Button>
         </motion.div>
       </motion.div>
