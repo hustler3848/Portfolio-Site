@@ -9,19 +9,20 @@ import { useIsMobile } from '@/hooks/use-mobile';
 interface ParticlesProps {
   className?: string;
   quantity?: number;
-  ease?: number;
+  friction?: number;
+  gravity?: number;
 }
 
 export function Particles({
   className,
-  quantity = 100,
-  ease = 50,
+  quantity = 150,
+  friction = 0.98,
+  gravity = 0.05
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const circles = useRef<any[]>([]);
-  const mouse = useRef<{ x: number | null; y: number; dx: number; dy: number }>({ x: null, y: null, dx: 0, dy: 0 });
-  const lastMousePosition = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const mouse = useRef<{ x: number | null; y: number; }>({ x: null, y: null });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
   const { theme } = useTheme();
@@ -44,19 +45,13 @@ export function Particles({
   useEffect(() => {
     if (isMobile) return;
     const handleMouseMove = (e: MouseEvent) => {
-        const { clientX, clientY } = e;
-        if (lastMousePosition.current.x !== null) {
-            mouse.current.dx = clientX - lastMousePosition.current.x;
-            mouse.current.dy = clientY - lastMousePosition.current.y;
-        }
-        lastMousePosition.current = { x: clientX, y: clientY };
-        mouse.current.x = clientX;
-        mouse.current.y = clientY;
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
     };
 
     const handleMouseLeave = () => {
-        mouse.current = { x: null, y: null, dx: 0, dy: 0 };
-        lastMousePosition.current = { x: null, y: null };
+      mouse.current.x = null;
+      mouse.current.y = null;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -92,47 +87,73 @@ export function Particles({
     alpha: number;
     velocity: { x: number; y: number };
     color: string;
+    hue: number;
 
     constructor() {
       const { w, h } = canvasSize.current;
       this.x = Math.random() * w;
       this.y = Math.random() * h;
-      this.size = Math.random() * 2 + 1;
-      this.alpha = 0;
-      this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
-      const hue = Math.floor(Math.random() * 360);
-      this.color = `${hue}, 100%, 70%`;
+      this.size = Math.random() * 2 + 0.5;
+      this.alpha = 0.1 + Math.random() * 0.3;
+      this.velocity = { x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2 };
+      this.hue = Math.floor(Math.random() * 360);
+      this.color = `hsla(${this.hue}, 100%, 70%, ${this.alpha})`;
     }
 
     draw() {
-      if(context.current && this.alpha > 0) {
+      if(context.current) {
         context.current.beginPath();
         context.current.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        context.current.fillStyle = `hsla(${this.color}, ${this.alpha})`;
+        context.current.fillStyle = this.color;
         context.current.fill();
       }
     }
 
     update() {
+      const { w, h } = canvasSize.current;
+      
+      // Apply gravity
+      this.velocity.y += gravity;
+
+      // Apply friction
+      this.velocity.x *= friction;
+      this.velocity.y *= friction;
+
+      // Attract to mouse
       if (mouse.current.x !== null && mouse.current.y !== null) {
-          const dx = mouse.current.x - this.x;
-          const dy = mouse.current.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 150) {
-              this.alpha = Math.min(1, this.alpha + 0.05);
-          } else {
-              this.alpha = Math.max(0, this.alpha - 0.01);
-          }
+        const dx = mouse.current.x - this.x;
+        const dy = mouse.current.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist > 1) { // prevent division by zero
+          const forceDirectionX = dx / dist;
+          const forceDirectionY = dy / dist;
           
-          if (dist > 0) {
-            this.x += dx / (ease / (this.size / 4));
-            this.y += dy / (ease / (this.size / 4));
-          }
-
-      } else {
-          this.alpha = Math.max(0, this.alpha - 0.01);
+          // The force is stronger when closer to the mouse
+          const force = (Math.max(300 - dist, 0) / 300) * 0.6;
+          
+          this.velocity.x += forceDirectionX * force;
+          this.velocity.y += forceDirectionY * force;
+        }
       }
+
+      // Update position
+      this.x += this.velocity.x;
+      this.y += this.velocity.y;
+
+      // Bounce off walls
+      if (this.x <= this.size || this.x >= w - this.size) {
+        this.velocity.x *= -0.8;
+        this.x = this.x <= this.size ? this.size : w - this.size;
+      }
+      if (this.y <= this.size || this.y >= h - this.size) {
+        this.velocity.y *= -0.8;
+        this.y = this.y <= this.size ? this.size : h - this.size;
+      }
+      
+      // Update color and alpha
+      this.hue += 0.5;
+      this.color = `hsla(${this.hue}, 100%, 70%, ${this.alpha})`;
     }
   }
 
@@ -159,7 +180,7 @@ export function Particles({
   if (isMobile) return null;
 
   return (
-    <div className={cn("pointer-events-none", className)}>
+    <div className={cn("pointer-events-none fixed inset-0 -z-20", className)}>
       <canvas ref={canvasRef} />
     </div>
   );

@@ -34,7 +34,7 @@ export default function Home() {
         {isLoading && <Preloader />}
       </AnimatePresence>
       <CustomCursor />
-      <Particles className="fixed inset-0 -z-10" />
+      <Particles className="fixed inset-0 -z-10" quantity={150} />
       <Header />
       <main className="flex flex-col">
         <Intro />
