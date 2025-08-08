@@ -48,12 +48,17 @@ export function AnimatedInput({
     onBlur: () => setIsFocused(false),
   };
 
+  const hasValueOrIsFocused = value || isFocused;
+
   return (
     <div className="relative">
       <motion.div 
         animate={{ scale: isFocused ? 1.1 : 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10"
+        className={cn(
+          "absolute left-3 text-muted-foreground z-10 transition-all duration-300",
+           hasValueOrIsFocused ? 'top-3.5' : 'top-1/2 -translate-y-1/2'
+        )}
       >
         <Icon className="h-5 w-5" />
       </motion.div>
@@ -62,7 +67,7 @@ export function AnimatedInput({
         htmlFor={name}
         className={cn(
           "absolute left-10 transition-all duration-300 ease-in-out pointer-events-none",
-          (value || isFocused)
+          hasValueOrIsFocused
             ? "top-1 text-xs text-primary"
             : "top-1/2 -translate-y-1/2 text-base text-muted-foreground"
         )}
