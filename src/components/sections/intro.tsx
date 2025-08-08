@@ -3,8 +3,12 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useMagnetic } from "@/hooks/use-magnetic";
+import { useRef } from "react";
 
 export function Intro() {
+  const magneticRef = useRef<HTMLButtonElement>(null);
+  const { x, y } = useMagnetic(magneticRef);
 
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
@@ -14,13 +18,29 @@ export function Intro() {
         });
     }
   };
+  
+  const headline = "Crafting Digital Experiences";
+  const words = headline.split(" ");
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
       },
     },
   };
@@ -48,16 +68,34 @@ export function Intro() {
         <motion.p variants={itemVariants} className="text-sm uppercase tracking-widest text-primary">
           Creative Developer & Designer
         </motion.p>
-        <motion.h1 variants={itemVariants}>
-          Crafting Digital Experiences
+        <motion.h1 
+          variants={containerVariants}
+          className="flex flex-wrap justify-center"
+        >
+          {words.map((word, index) => (
+            <motion.span
+              key={index}
+              variants={wordVariants}
+              className="mr-[0.25em]" // Adjust spacing between words
+            >
+              {word}
+            </motion.span>
+          ))}
         </motion.h1>
         <motion.p variants={itemVariants} className="text-base md:text-lg text-foreground/80">
           I build beautiful, functional, and user-centric web applications.
         </motion.p>
-        <motion.div variants={itemVariants}>
-          <Button size="lg" onClick={() => scrollTo('#projects')} className="group">
-            View My Work
-          </Button>
+        <motion.div 
+          variants={itemVariants} 
+        >
+          <motion.div
+            style={{ x, y }}
+            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+          >
+            <Button ref={magneticRef} size="lg" onClick={() => scrollTo('#projects')} className="group">
+              View My Work
+            </Button>
+          </motion.div>
         </motion.div>
       </motion.div>
     </section>
