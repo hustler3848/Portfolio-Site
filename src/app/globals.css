@@ -112,6 +112,9 @@
   p {
     @apply max-w-prose leading-relaxed;
   }
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
 }
 
 html.lenis {
