@@ -11,8 +11,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['"Manrope"', 'sans-serif'],
-        headline: ['"Recoleta"', 'serif'],
+        body: ['"Bricolage Grotesque"', 'sans-serif'],
+        headline: ['"Bricolage Grotesque"', 'serif'],
         code: ['monospace'],
       },
       colors: {
