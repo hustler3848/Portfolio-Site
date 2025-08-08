@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { saveMessage } from "@/app/actions";
 import { Loader2, Check, Send, User, Mail, MessageSquare } from "lucide-react";
 import { AnimatedInput } from "@/components/animated-input";
+import { Progress } from "@/components/ui/progress";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -77,6 +78,8 @@ export function Contact() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
+  
+  const progressValue = (steps.indexOf(currentStep) + 1) / steps.length * 100;
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
@@ -105,6 +108,7 @@ export function Contact() {
             <AnimatePresence>
               {currentStep !== 'submitted' ? (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                   <Progress value={progressValue} className="rounded-none h-1 bg-transparent"/>
                   <div className="p-6 sm:p-8">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                       <AnimatePresence mode="wait">
