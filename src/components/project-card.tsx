@@ -62,7 +62,7 @@ export function ProjectCard({ project }: { project: Project }) {
         rotateX,
         transformStyle: "preserve-3d",
       }}
-      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl h-full flex flex-col group"
+      className="relative rounded-lg overflow-hidden bg-card text-card-foreground shadow-2xl h-full flex flex-col group project-card transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
     >
       <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }} className="p-6 flex flex-col flex-grow">
         <div className="relative aspect-video rounded-md overflow-hidden mb-4" style={{ transform: "translateZ(20px)" }}>
@@ -79,21 +79,21 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         
         <h3 className="font-headline text-2xl font-bold mb-2">{project.title}</h3>
-        <p className="text-card-foreground/80 mb-4 flex-grow">{project.description}</p>
+        <p className="text-card-foreground/80 mb-4 flex-grow group-hover:text-primary-foreground/80 transition-colors duration-500">{project.description}</p>
         
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tags.map(tag => (
-            <Badge key={tag} variant="secondary">{tag}</Badge>
+            <Badge key={tag} variant="secondary" className="group-hover:bg-primary-foreground/20 group-hover:text-primary-foreground transition-colors duration-500">{tag}</Badge>
           ))}
         </div>
         
         <div className="flex items-center gap-4">
-          <Button asChild>
+          <Button asChild className="bg-primary-foreground text-background hover:bg-primary-foreground/80">
             <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
             </a>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="group-hover:border-primary-foreground/50 group-hover:bg-transparent group-hover:text-primary-foreground transition-colors duration-500">
             <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
               <Github className="mr-2 h-4 w-4" /> Source
             </a>

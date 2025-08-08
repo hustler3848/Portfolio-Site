@@ -38,7 +38,7 @@ export function CustomCursor() {
           if (e.target.closest('a, button, input, label, select, textarea')) {
             setIsHovering(true);
           }
-          if (e.target.closest('.group')) { // project cards have group class
+          if (e.target.closest('.group.project-card')) { 
             setIsHoveringProject(true);
           }
       }
@@ -49,7 +49,7 @@ export function CustomCursor() {
             if (e.target.closest('a, button, input, label, select, textarea')) {
               setIsHovering(false);
             }
-            if (e.target.closest('.group')) {
+            if (e.target.closest('.group.project-card')) {
                 setIsHoveringProject(false);
             }
         }
