@@ -1,9 +1,10 @@
+
 "use client";
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
-export function Hero() {
+export function Intro() {
 
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
@@ -54,7 +55,7 @@ export function Hero() {
           I build beautiful, functional, and user-centric web applications.
         </motion.p>
         <motion.div variants={itemVariants}>
-          <Button size="lg" onClick={() => scrollTo('#projects')}>
+          <Button size="lg" onClick={() => scrollTo('#projects')} className="group">
             View My Work
           </Button>
         </motion.div>
