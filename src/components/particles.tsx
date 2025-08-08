@@ -15,7 +15,7 @@ interface ParticlesProps {
 export function Particles({
   className,
   quantity = 30,
-  ease = 20,
+  ease = 5,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -88,7 +88,7 @@ export function Particles({
       const { w, h } = canvasSize.current;
       this.x = Math.random() * w;
       this.y = Math.random() * h;
-      this.size = Math.random() * 3 + 1; // Increased size
+      this.size = Math.random() * 5 + 2; // Increased size
       this.alpha = 0;
       this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
       
@@ -112,10 +112,11 @@ export function Particles({
           const dy = mouse.current.y - this.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 50) {
-              this.alpha = Math.min(1, this.alpha + 0.05);
+          // Particles become visible when mouse is close
+          if (dist < 100) { 
+              this.alpha = Math.min(1, this.alpha + 0.1);
           } else {
-              this.alpha = Math.max(0, this.alpha - 0.01);
+              this.alpha = Math.max(0, this.alpha - 0.02);
           }
           
           if(dist > 0) {
@@ -124,7 +125,7 @@ export function Particles({
           }
 
       } else {
-          this.alpha = Math.max(0, this.alpha - 0.01);
+          this.alpha = Math.max(0, this.alpha - 0.02);
       }
     }
   }
