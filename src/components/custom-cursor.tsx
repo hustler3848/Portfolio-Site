@@ -6,12 +6,19 @@ import { motion, useSpring } from "framer-motion";
 import { useTheme } from "@/components/providers/theme-provider";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+const themeColors = {
+  'theme-dark': 'hsl(0 0% 96%)', // foreground
+  'theme-light': 'hsl(0 0% 10%)', // foreground
+  'theme-cyberpunk': 'hsl(127 100% 82%)', // foreground
+  'theme-minimal-beige': 'hsl(0 0% 17%)', // foreground
+  'project-hover-color': 'hsl(var(--primary))'
+};
+
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [isHoveringProject, setIsHoveringProject] = useState(false);
   const { theme } = useTheme(); 
-  const [cursorColor, setCursorColor] = useState('hsl(var(--foreground))');
   const isMobile = useIsMobile();
 
   const springConfig = { damping: 25, stiffness: 400, mass: 0.1 };
@@ -21,14 +28,6 @@ export function CustomCursor() {
   useEffect(() => {
     if (isMobile) return;
     
-    const updateCursorColor = () => {
-        if (typeof window !== 'undefined') {
-            const foregroundHslString = getComputedStyle(document.body).getPropertyValue('--foreground').trim();
-            setCursorColor(`hsl(${foregroundHslString})`);
-        }
-    }
-    updateCursorColor();
-
     const updateMousePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
@@ -59,17 +58,15 @@ export function CustomCursor() {
     document.addEventListener('mouseover', handleMouseOver);
     document.addEventListener('mouseout', handleMouseOut);
 
-    const observer = new MutationObserver(updateCursorColor);
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseout', handleMouseOut);
-      observer.disconnect();
     };
-  }, [theme, isMobile]);
+  }, [isMobile]);
+
+  const cursorColor = themeColors[theme] || 'hsl(0 0% 96%)';
 
   const variants = {
     default: {
@@ -87,7 +84,7 @@ export function CustomCursor() {
     projectHover: {
       width: 80,
       height: 80,
-      backgroundColor: 'hsl(var(--primary))',
+      backgroundColor: themeColors['project-hover-color'],
       mixBlendMode: 'difference' as const,
     }
   };

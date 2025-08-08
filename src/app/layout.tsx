@@ -8,7 +8,6 @@ import { AppProviders } from '@/components/providers/app-providers';
 export const metadata: Metadata = {
   title: 'Darshan - Creative Portfolio',
   description: 'A creative portfolio built with Next.js, Framer Motion, and Locomotive Scroll.',
-  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -22,7 +21,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@24..96,200..800&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
-        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={cn('font-body antialiased', 'bg-background text-foreground')}>
         <ThemeProvider>
