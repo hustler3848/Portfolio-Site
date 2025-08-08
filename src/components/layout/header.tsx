@@ -21,20 +21,7 @@ export function Header() {
   const controls = useAnimation();
   const { theme } = useTheme();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
+  const updateHeaderStyle = (scrolled: boolean) => {
     if (typeof window !== 'undefined') {
         const style = getComputedStyle(document.body);
         const backgroundHslString = style.getPropertyValue('--background').trim();
@@ -43,7 +30,7 @@ export function Header() {
         const backgroundStart = `hsla(${h}, ${s}%, ${l}%, 0)`;
         const backgroundEnd = `hsla(${h}, ${s}%, ${l}%, 0.8)`;
         
-        if (isScrolled) {
+        if (scrolled) {
           controls.start({
             backgroundColor: backgroundEnd,
             backdropFilter: "blur(12px)",
@@ -57,7 +44,23 @@ export function Header() {
           });
         }
     }
-  }, [isScrolled, controls, theme]);
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 10;
+      setIsScrolled(scrolled);
+      updateHeaderStyle(scrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    updateHeaderStyle(isScrolled);
+  }, [theme, isScrolled, controls]);
   
   const scrollTo = (id: string) => {
     const element = document.querySelector(id);
