@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -34,23 +35,27 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    let backgroundHsl;
     if (typeof window !== 'undefined') {
-        backgroundHsl = getComputedStyle(document.documentElement).getPropertyValue('--background').trim();
-    }
-    
-    if (isScrolled) {
-      controls.start({
-        backgroundColor: `hsla(${backgroundHsl}, 0.8)`,
-        backdropFilter: "blur(12px)",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-      });
-    } else {
-      controls.start({
-        backgroundColor: `hsla(${backgroundHsl}, 0)`,
-        backdropFilter: "blur(4px)",
-        boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
-      });
+        const style = getComputedStyle(document.body);
+        const backgroundHslString = style.getPropertyValue('--background').trim();
+        const [h, s, l] = backgroundHslString.split(" ").map(v => parseFloat(v));
+        
+        const backgroundStart = `hsla(${h}, ${s}%, ${l}%, 0)`;
+        const backgroundEnd = `hsla(${h}, ${s}%, ${l}%, 0.8)`;
+        
+        if (isScrolled) {
+          controls.start({
+            backgroundColor: backgroundEnd,
+            backdropFilter: "blur(12px)",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          });
+        } else {
+          controls.start({
+            backgroundColor: backgroundStart,
+            backdropFilter: "blur(4px)",
+            boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
+          });
+        }
     }
   }, [isScrolled, controls, theme]);
   

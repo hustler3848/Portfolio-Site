@@ -31,13 +31,20 @@ export function AnimatedInput({
   const isTouched = touchedFields[name];
   const error = errors[name];
   
-  const isFocused = typeof window !== 'undefined' && document.activeElement?.name === name;
+  const [isFocused, setIsFocused] = React.useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && onEnterPress && type !== 'textarea') {
       e.preventDefault();
       onEnterPress();
     }
+  };
+
+  const commonProps = {
+    id: name,
+    ...register(name),
+    onFocus: () => setIsFocused(true),
+    onBlur: () => setIsFocused(false),
   };
 
   return (
@@ -64,16 +71,15 @@ export function AnimatedInput({
 
       {type === 'textarea' ? (
          <Textarea
-          id={name}
-          {...register(name)}
+          {...commonProps}
+          onKeyDown={handleKeyDown}
           className="pl-10 pt-6 bg-transparent"
           rows={5}
         />
       ) : (
         <Input
-            id={name}
             type={type}
-            {...register(name)}
+            {...commonProps}
             onKeyDown={handleKeyDown}
             className="pl-10 pt-6 h-14 bg-transparent"
         />
@@ -94,5 +100,3 @@ export function AnimatedInput({
     </div>
   );
 }
-
-    

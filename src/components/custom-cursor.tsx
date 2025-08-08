@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,7 +6,7 @@ import { motion, useSpring } from "framer-motion";
 import { useTheme } from "@/components/providers/theme-provider";
 
 export function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const { accentColor } = useTheme();
 
@@ -19,13 +20,13 @@ export function CustomCursor() {
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      if (e.target instanceof Element && (e.target.closest('a, button, input[type="color"]'))) {
+      if (e.target instanceof Element && (e.target.closest('a, button, input[type="color"], label'))) {
         setIsHovering(true);
       }
     };
     
     const handleMouseOut = (e: MouseEvent) => {
-      if (e.target instanceof Element && (e.target.closest('a, button, input[type="color"]'))) {
+      if (e.target instanceof Element && (e.target.closest('a, button, input[type="color"], label'))) {
         setIsHovering(false);
       }
     };
