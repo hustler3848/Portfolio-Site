@@ -11,13 +11,15 @@ interface ParticlesProps {
   quantity?: number;
   friction?: number;
   gravity?: number;
+  connectDistance?: number;
 }
 
 export function Particles({
   className,
   quantity = 150,
   friction = 0.98,
-  gravity = 0.05
+  gravity = 0.05,
+  connectDistance = 100
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -169,9 +171,26 @@ export function Particles({
     const { w, h } = canvasSize.current;
     context.current.clearRect(0, 0, w, h);
     
-    circles.current.forEach(circle => {
+    circles.current.forEach((circle, i) => {
         circle.update();
         circle.draw();
+
+        // Draw connection lines
+        for (let j = i + 1; j < circles.current.length; j++) {
+            const otherCircle = circles.current[j];
+            const dist = Math.sqrt(Math.pow(circle.x - otherCircle.x, 2) + Math.pow(circle.y - otherCircle.y, 2));
+
+            if (dist < connectDistance) {
+                if (context.current) {
+                    context.current.strokeStyle = `hsla(${circle.hue}, 100%, 70%, ${1 - dist / connectDistance})`;
+                    context.current.lineWidth = 0.5;
+                    context.current.beginPath();
+                    context.current.moveTo(circle.x, circle.y);
+                    context.current.lineTo(otherCircle.x, otherCircle.y);
+                    context.current.stroke();
+                }
+            }
+        }
     });
 
     requestAnimationFrame(animate);
