@@ -88,22 +88,13 @@ export function Particles({
       const { w, h } = canvasSize.current;
       this.x = Math.random() * w;
       this.y = Math.random() * h;
-      this.size = Math.random() * 1.5 + 0.5;
+      this.size = Math.random() * 3 + 1; // Increased size
       this.alpha = 0;
       this.velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
-      this.color = "0,0,0";
-      this.updateColor();
-    }
-
-    updateColor() {
-      let accentHsl;
-      if (typeof window !== 'undefined') {
-        accentHsl = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-      } else {
-        accentHsl = "182 100% 50%";
-      }
-      const [h, s, l] = accentHsl.split(" ").map(val => parseFloat(val));
-      this.color = `${h}, ${s}%, ${l}%`;
+      
+      // Assign a random multi-color hue
+      const hue = Math.floor(Math.random() * 360);
+      this.color = `${hue}, 100%, 70%`;
     }
 
     draw() {
