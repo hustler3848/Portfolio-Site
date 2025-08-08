@@ -1,6 +1,7 @@
 
 "use client";
 
+import * as React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
