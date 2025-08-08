@@ -86,16 +86,21 @@ export function Header() {
         <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('#hero');}} className="font-headline text-2xl font-bold text-foreground transition-colors hover:text-primary">
           Darshan
         </a>
-        <nav className="hidden items-center gap-2 md:flex border border-border rounded-full px-2">
+        <nav className="hidden items-center gap-2 md:flex rounded-full px-2">
           {navLinks.map((link) => (
-            <a
+            <Button
               key={link.name}
-              href={link.href}
-              onClick={(e) => { e.preventDefault(); scrollTo(link.href);}}
+              variant="ghost"
+              asChild
               className="blob-link text-base font-medium text-foreground transition-colors rounded-full px-4 py-2"
             >
-              {link.name}
-            </a>
+              <a
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); scrollTo(link.href);}}
+              >
+                {link.name}
+              </a>
+            </Button>
           ))}
         </nav>
         <div className="flex items-center gap-2">
