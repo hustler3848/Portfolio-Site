@@ -77,30 +77,18 @@ export function CustomCursor() {
       height: 20,
       backgroundColor: cursorColor,
       mixBlendMode: 'difference' as const,
-      x: cursorX,
-      y: cursorY,
-      translateX: "-50%",
-      translateY: "-50%",
     },
     hover: {
       width: 40,
       height: 40,
       backgroundColor: cursorColor,
       mixBlendMode: 'difference' as const,
-      x: cursorX,
-      y: cursorY,
-      translateX: "-50%",
-      translateY: "-50%",
     },
     projectHover: {
       width: 80,
       height: 80,
       backgroundColor: 'hsl(var(--primary))',
       mixBlendMode: 'difference' as const,
-      x: cursorX,
-      y: cursorY,
-      translateX: "-50%",
-      translateY: "-50%",
     }
   };
 
@@ -110,6 +98,12 @@ export function CustomCursor() {
 
   return (
     <motion.div
+      style={{
+        x: cursorX,
+        y: cursorY,
+        translateX: "-50%",
+        translateY: "-50%",
+      }}
       variants={variants}
       animate={isHoveringProject ? "projectHover" : isHovering ? "hover" : "default"}
       transition={{ type: "spring", ...springConfig, duration: 0.2, ease: "easeInOut" }}

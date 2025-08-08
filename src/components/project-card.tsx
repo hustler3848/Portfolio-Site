@@ -88,7 +88,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         
         <div className="flex items-center gap-4">
-          <Button asChild className="bg-primary-foreground text-background hover:bg-primary-foreground/80">
+          <Button asChild className="bg-primary-foreground text-background hover:bg-primary-foreground/80 group-hover:bg-background group-hover:text-foreground">
             <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
             </a>
