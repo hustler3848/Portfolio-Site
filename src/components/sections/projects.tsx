@@ -14,7 +14,7 @@ const projectsData = [
     category: "Web App",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "movie app",
-    liveDemoUrl: "#!",
+    liveDemoUrl: "https://frameflux.vercel.app/",
   },
   {
     title: "CodeSnippr",
@@ -22,7 +22,7 @@ const projectsData = [
     category: "Development Tool",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "code snippet",
-    liveDemoUrl: "#!",
+    liveDemoUrl: "https://dev-book-weld.vercel.app/",
   },
   {
     title: "MindGuard",
@@ -30,10 +30,10 @@ const projectsData = [
     category: "Mental Health",
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "mental health",
-    liveDemoUrl: "#!",
+    liveDemoUrl: "https://mind-guard-three.vercel.app/",
   },
   {
-    title: "Portfolio V1",
+    title: "PenLoft",
     client: "Personal",
     category: "Portfolio",
     imageUrl: "https://placehold.co/600x400.png",
