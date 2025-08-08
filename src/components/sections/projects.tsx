@@ -1,43 +1,35 @@
+
 "use client";
 import { ProjectCard } from "@/components/project-card";
 import { motion } from "framer-motion";
 
 const projectsData = [
   {
-    title: "Project Alpha",
-    description: "A cutting-edge web application for data visualization.",
+    title: "FrameFlux",
+    description: "A movies, webseries/ Anime Web App",
     imageUrl: "https://placehold.co/600x400.png",
-    tags: ["React", "Next.js", "D3.js"],
-    liveUrl: "#",
-    githubUrl: "#",
-    dataAiHint: "data visualization",
+    tags: ["Next JS", "Firebase"],
+    liveUrl: "https://frameflux.vercel.app/",
+    githubUrl: "https://github.com/hustler3848/FrameFlux",
+    dataAiHint: "movie app",
   },
   {
-    title: "Project Beta",
-    description: "An e-commerce platform with a focus on user experience.",
+    title: "CodeSnippr",
+    description: "A developers application where they can save the code snippets and reuse them anytime they want.",
     imageUrl: "https://placehold.co/600x400.png",
-    tags: ["Vue.js", "Nuxt", "Stripe"],
-    liveUrl: "#",
-    githubUrl: "#",
-    dataAiHint: "ecommerce platform",
+    tags: ["Next JS", "Firebase"],
+    liveUrl: "https://dev-book-weld.vercel.app/",
+    githubUrl: "https://github.com/hustler3848/DevBook",
+    dataAiHint: "code snippet",
   },
   {
-    title: "Project Gamma",
-    description: "A mobile-first social networking app.",
+    title: "MindGuard",
+    description: "A Site where students can maintain there Mental Health.",
     imageUrl: "https://placehold.co/600x400.png",
-    tags: ["React Native", "Firebase", "GraphQL"],
-    liveUrl: "#",
-    githubUrl: "#",
-    dataAiHint: "social networking",
-  },
-  {
-    title: "Project Delta",
-    description: "A content management system for creative writers.",
-    imageUrl: "https://placehold.co/600x400.png",
-    tags: ["SvelteKit", "Tailwind CSS", "Supabase"],
-    liveUrl: "#",
-    githubUrl: "#",
-    dataAiHint: "content management",
+    tags: ["Next JS", "Firebase"],
+    liveUrl: "https://mind-guard-three.vercel.app/",
+    githubUrl: "https://github.com/hustler3848/Mind-Guard",
+    dataAiHint: "mental health",
   },
 ];
 
