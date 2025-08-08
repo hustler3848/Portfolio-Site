@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
-import { CustomCursor } from '@/components/custom-cursor';
 import { cn } from '@/lib/utils';
+import { AppProviders } from '@/components/providers/app-providers';
 
 export const metadata: Metadata = {
   title: 'Darshan - Creative Portfolio',
@@ -25,9 +24,9 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased', 'bg-background text-foreground')}>
         <ThemeProvider>
-          <CustomCursor />
-          {children}
-          <Toaster />
+          <AppProviders>
+            {children}
+          </AppProviders>
         </ThemeProvider>
       </body>
     </html>

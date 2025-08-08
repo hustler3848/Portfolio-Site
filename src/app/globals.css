@@ -75,36 +75,11 @@
     --bg-image: linear-gradient(180deg, #2e026d 0%, #000000 100%);
     --noise-bg: none;
   }
-
-  .theme-beige {
-    --background: 38 56% 93%; /* #f5efe7 */
-    --foreground: 0 0% 17%; /* #2b2b2b */
-    --card: 38 56% 96%;
-    --card-foreground: 0 0% 17%;
-    --popover: 38 56% 93%;
-    --popover-foreground: 0 0% 17%;
-    --primary: 15 100% 66%; /* #ff7b54 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 38 56% 90%;
-    --secondary-foreground: 0 0% 17%;
-    --muted: 38 56% 90%;
-    --muted-foreground: 0 0% 35%;
-    --accent: 15 100% 66%; /* #ff7b54 */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 38 56% 87%;
-    --input: 38 56% 87%;
-    --ring: 15 100% 66%;
-    --bg-image: none;
-    --noise-bg: none;
-  }
 }
 
 @layer base {
   * {
     @apply border-border;
-    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, border-color 0.5s ease-in-out;
   }
   body {
     @apply bg-background text-foreground;
@@ -164,10 +139,46 @@ html.lenis {
     left: 0;
     background-color: hsl(var(--accent));
     transform-origin: bottom right;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.25s ease-out;
 }
 
 .link-underline:hover::after {
     transform: scaleX(1);
     transform-origin: bottom left;
+}
+
+/* Custom Scrollbar for Locomotive Scroll */
+.c-scrollbar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  transform-origin: center right;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+.c-scrollbar:hover {
+  transform: scaleX(1.4);
+}
+.has-scroll-dragging .c-scrollbar,
+.has-scroll-scrolling .c-scrollbar,
+.c-scrollbar:hover {
+  opacity: 1;
+}
+.c-scrollbar_thumb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: hsl(var(--primary));
+  opacity: 0.8;
+  width: 6px;
+  border-radius: 10px;
+  margin: 2px;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.has-scroll-dragging .c-scrollbar_thumb {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
 }
