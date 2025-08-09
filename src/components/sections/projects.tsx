@@ -170,6 +170,7 @@ export function Projects() {
             >
               <motion.div
                 className="w-full h-full"
+                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 2, ease: 'easeInOut' }}
               >
                 <Image
