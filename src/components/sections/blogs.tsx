@@ -63,13 +63,13 @@ export function Blogs() {
         variants={containerVariants}
       >
         <motion.div className="mb-12" variants={itemVariants}>
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-2 mb-4">
             <span className="w-3 h-3 bg-primary rounded-full"></span>
-            <p className="text-sm uppercase tracking-widest font-semibold text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
+            <h2 className="text-sm uppercase tracking-widest font-semibold text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
               From My Blog
-            </p>
+            </h2>
           </div>
-          <p className="text-base text-secondary-foreground/80 max-w-2xl">
+          <p className="text-sm text-secondary-foreground/60 max-w-2xl">
             A collection of my thoughts on design, development, and the tech world.
           </p>
         </motion.div>
