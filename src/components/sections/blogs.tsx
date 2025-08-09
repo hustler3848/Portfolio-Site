@@ -63,13 +63,13 @@ export function Blogs() {
         variants={containerVariants}
       >
         <motion.div className="mb-12" variants={itemVariants}>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-4">
             <span className="w-3 h-3 bg-primary rounded-full"></span>
-            <h2 className="mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
+            <p className="text-sm uppercase tracking-widest font-semibold text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
               From My Blog
-            </h2>
+            </p>
           </div>
-          <p className="text-base md:text-lg text-secondary-foreground/80 max-w-2xl">
+          <p className="text-base text-secondary-foreground/80 max-w-2xl">
             A collection of my thoughts on design, development, and the tech world.
           </p>
         </motion.div>
@@ -117,7 +117,7 @@ export function Blogs() {
             variants={itemVariants}
         >
           <Button size="lg" asChild className="blob-link">
-            <a href="#!" target="_blank" rel="noopener noreferrer">View More</a>
+            <a href="https://info-glimpse.blogspot.com/" target="_blank" rel="noopener noreferrer">View More</a>
           </Button>
         </motion.div>
       </motion.div>
