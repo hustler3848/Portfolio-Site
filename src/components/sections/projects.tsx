@@ -189,14 +189,20 @@ export function Projects() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
               className="absolute w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
             >
-              <Image
-                src={projectsData[hoveredIndex].imageUrl}
-                alt={projectsData[hoveredIndex].title}
-                fill
-                sizes="400px"
-                style={{ objectFit: 'cover' }}
-                data-ai-hint={projectsData[hoveredIndex].dataAiHint}
-              />
+              <motion.div
+                className="w-full h-full"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 2, ease: 'easeInOut' }}
+              >
+                <Image
+                  src={projectsData[hoveredIndex].imageUrl}
+                  alt={projectsData[hoveredIndex].title}
+                  fill
+                  sizes="400px"
+                  style={{ objectFit: 'cover' }}
+                  data-ai-hint={projectsData[hoveredIndex].dataAiHint}
+                />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"/>
             </motion.div>
         )}
@@ -222,8 +228,8 @@ export function Projects() {
                     className="block group project-link-hover"
                 >
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-500">
-                            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-500">
+                        <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-200">
+                            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-200">
                                 {project.title}
                                 <ArrowUpRight 
                                     className={cn(
@@ -233,7 +239,7 @@ export function Projects() {
                                 />
                             </h3>
 
-                            <div className="text-right text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors duration-500">
+                            <div className="text-right text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors duration-200">
                                 <p className="font-semibold">{project.client}</p>
                                 <p>{project.category}</p>
                             </div>
