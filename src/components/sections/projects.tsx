@@ -178,7 +178,7 @@ export function Projects() {
         {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               style={{
-                top: smoothMouseY,
+                top: `calc(${smoothMouseY.get()}px + 20px)`,
                 right: '20%',
                 translateX: "0%",
                 translateY: "-50%",
@@ -225,7 +225,7 @@ export function Projects() {
                     rel="noopener noreferrer"
                     variants={itemVariants} 
                     onMouseEnter={() => setHoveredIndex(index)}
-                    className="block group project-link-hover"
+                    className="block group project-card project-link-hover"
                 >
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-200">
