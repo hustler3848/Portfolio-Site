@@ -106,11 +106,9 @@ export function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const springConfig = { damping: 25, stiffness: 400, mass: 0.1 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
 
@@ -118,7 +116,6 @@ export function Projects() {
     const handleMouseMove = (e: MouseEvent) => {
         if(containerRef.current) {
             const rect = containerRef.current.getBoundingClientRect();
-            mouseX.set(rect.width / 2); // Center horizontally
             mouseY.set(e.clientY - rect.top);
         }
     };
@@ -126,7 +123,7 @@ export function Projects() {
     return () => {
         window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [mouseX, mouseY]);
+  }, [mouseY]);
 
 
   const headingAndGradient = (
@@ -222,18 +219,11 @@ export function Projects() {
                     rel="noopener noreferrer"
                     variants={itemVariants} 
                     onMouseEnter={() => setHoveredIndex(index)}
-                    className="block group project-card"
+                    className="block group project-link-hover"
                 >
-                    <motion.div 
-                        animate={{
-                            backgroundColor: hoveredIndex === index ? 'hsl(var(--primary))' : 'transparent',
-                            color: hoveredIndex === index ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))'
-                        }}
-                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                        className="container mx-auto px-4 sm:px-6 lg:px-8"
-                    >
-                        <div className="flex justify-between items-center py-8 relative border-t border-border">
-                            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-500">
+                            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-500">
                                 {project.title}
                                 <ArrowUpRight 
                                     className={cn(
@@ -243,16 +233,12 @@ export function Projects() {
                                 />
                             </h3>
 
-                            <motion.div 
-                                animate={{ color: hoveredIndex === index ? 'hsl(var(--primary-foreground))' : 'hsl(var(--muted-foreground))' }}
-                                transition={{ duration: 0.4, ease: "easeInOut" }}
-                                className="text-right text-sm"
-                            >
+                            <div className="text-right text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors duration-500">
                                 <p className="font-semibold">{project.client}</p>
                                 <p>{project.category}</p>
-                            </motion.div>
+                            </div>
                         </div>
-                    </motion.div>
+                    </div>
                 </motion.a>
             </div>
         ))}
