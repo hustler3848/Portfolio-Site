@@ -65,7 +65,7 @@ export function Blogs() {
         <motion.div className="mb-12" variants={itemVariants}>
           <div className="flex items-center gap-2 mb-4">
             <span className="w-3 h-3 bg-primary rounded-full"></span>
-            <h2 className="text-sm uppercase tracking-widest font-semibold text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
+            <h2 className="text-sm uppercase tracking-widest font-semibold">
               From My Blog
             </h2>
           </div>
