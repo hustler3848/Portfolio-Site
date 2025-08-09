@@ -2,9 +2,9 @@
 "use client";
 
 import * as React from "react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -49,30 +49,28 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
-  }
-}
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 const itemVariants = {
-  hidden: { y: "100%" },
+  hidden: { opacity: 0, x: -20 },
   visible: {
-    y: "0%",
+    opacity: 1,
+    x: 0,
     transition: {
       duration: 0.6,
-      ease: [0.6, 0.05, 0.01, 0.9]
-    }
-  }
-}
+      ease: "easeOut",
+    },
+  },
+};
 
 function ProjectRowMobile({ project }: { project: typeof projectsData[0] }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
+      variants={itemVariants}
       className="bg-card rounded-lg overflow-hidden shadow-lg"
     >
       <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
@@ -131,7 +129,7 @@ export function Projects() {
           <div
             className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
           />
-          <motion.div
+           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -141,11 +139,17 @@ export function Projects() {
             <span className="w-3 h-3 bg-primary rounded-full"></span>
             <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
           </motion.div>
-          <div className="grid grid-cols-1 gap-8">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 gap-8"
+          >
             {projectsData.map((project) => (
               <ProjectRowMobile key={project.title} project={project} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
     );
@@ -189,48 +193,49 @@ export function Projects() {
 
       <motion.div
         className="relative border-b border-border"
+        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
         onMouseLeave={() => setHoveredIndex(null)}
       >
         {projectsData.map((project, index) => (
-            <div key={project.title} className="overflow-hidden">
-                <motion.a
-                    href={project.liveDemoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variants={itemVariants}
-                    onMouseEnter={(e) => {
-                      setHoveredIndex(index);
-                      setMouseY(e.clientY);
-                    }}
-                    onMouseMove={(e) => setMouseY(e.clientY)}
-                    className="block group project-card project-link-hover"
-                >
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-200">
-                            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-200">
-                                {project.title}
-                                <ArrowUpRight
-                                    className={cn(
-                                        "w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300",
-                                        hoveredIndex === index && "-translate-y-1 translate-x-1"
-                                    )}
-                                />
-                            </h3>
+            <motion.a
+                key={project.title}
+                href={project.liveDemoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={itemVariants}
+                onMouseEnter={(e) => {
+                  setHoveredIndex(index);
+                  setMouseY(e.clientY);
+                }}
+                onMouseMove={(e) => setMouseY(e.clientY)}
+                className="block group project-card project-link-hover"
+            >
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-200">
+                        <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-200">
+                            {project.title}
+                            <ArrowUpRight
+                                className={cn(
+                                    "w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300",
+                                    hoveredIndex === index && "-translate-y-1 translate-x-1"
+                                )}
+                            />
+                        </h3>
 
-                            <div className="text-right text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors duration-200">
-                                <p className="font-semibold">{project.client}</p>
-                                <p>{project.category}</p>
-                            </div>
+                        <div className="text-right text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors duration-200">
+                            <p className="font-semibold">{project.client}</p>
+                            <p>{project.category}</p>
                         </div>
                     </div>
-                </motion.a>
-            </div>
+                </div>
+            </motion.a>
         ))}
       </motion.div>
     </section>
   );
 }
+
+    
