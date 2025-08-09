@@ -2,9 +2,9 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -57,7 +57,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: "100%" },
-  visible: { 
+  visible: {
     y: "0%",
     transition: {
       duration: 0.6,
@@ -68,7 +68,7 @@ const itemVariants = {
 
 function ProjectRowMobile({ project }: { project: typeof projectsData[0] }) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -104,34 +104,14 @@ function ProjectRowMobile({ project }: { project: typeof projectsData[0] }) {
 export function Projects() {
   const isMobile = useIsMobile();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 400, mass: 0.1 };
-  const smoothMouseY = useSpring(mouseY, springConfig);
-
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-        if(containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            mouseY.set(e.clientY - rect.top);
-        }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [mouseY]);
-
+  const [mouseY, setMouseY] = useState(0);
 
   const headingAndGradient = (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div 
+      <div
         className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
       />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
@@ -148,10 +128,10 @@ export function Projects() {
     return (
       <section id="projects" className="py-24 relative overflow-hidden bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div 
+          <div
             className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"
           />
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -178,20 +158,18 @@ export function Projects() {
         {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               style={{
-                top: smoothMouseY,
+                top: `${mouseY}px`,
                 right: '20%',
                 translateX: "0%",
                 translateY: "-50%",
               }}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              animate={{ opacity: 1, scale: 1, transition: {duration: 0.4, ease: 'easeOut'} }}
+              exit={{ opacity: 0, scale: 0.8, transition: {duration: 0.2, ease: 'easeOut'} }}
               className="absolute w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
             >
               <motion.div
                 className="w-full h-full"
-                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 2, ease: 'easeInOut' }}
               >
                 <Image
@@ -208,9 +186,8 @@ export function Projects() {
         )}
       </AnimatePresence>
 
-      <motion.div 
-        ref={containerRef}
-        className="relative border-b border-border" 
+      <motion.div
+        className="relative border-b border-border"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -219,23 +196,27 @@ export function Projects() {
       >
         {projectsData.map((project, index) => (
             <div key={project.title} className="overflow-hidden">
-                <motion.a 
+                <motion.a
                     href={project.liveDemoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    variants={itemVariants} 
-                    onMouseEnter={() => setHoveredIndex(index)}
+                    variants={itemVariants}
+                    onMouseEnter={(e) => {
+                      setHoveredIndex(index);
+                      setMouseY(e.clientY);
+                    }}
+                    onMouseMove={(e) => setMouseY(e.clientY)}
                     className="block group project-card project-link-hover"
                 >
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center py-8 relative border-t border-border group-hover:border-transparent transition-colors duration-200">
                             <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-200">
                                 {project.title}
-                                <ArrowUpRight 
+                                <ArrowUpRight
                                     className={cn(
                                         "w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300",
                                         hoveredIndex === index && "-translate-y-1 translate-x-1"
-                                    )} 
+                                    )}
                                 />
                             </h3>
 
@@ -252,4 +233,3 @@ export function Projects() {
     </section>
   );
 }
-
