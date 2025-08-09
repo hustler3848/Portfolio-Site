@@ -90,20 +90,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'shine-infinite': 'shine 4s linear infinite',
       },
-      perspective: {
-        '1000': '1000px',
-      }
     },
   },
-  plugins: [require('tailwindcss-animate'),
-    function ({ addUtilities }: { addUtilities: any }) {
-      const newUtilities = {
-        '.perspective-1000': {
-          perspective: '1000px',
-        },
-      }
-      addUtilities(newUtilities, ['responsive', 'hover'])
-    }
-  ],
+  plugins: [require('tailwindcss-animate')],
 } satisfies Config;
-

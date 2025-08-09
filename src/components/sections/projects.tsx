@@ -6,7 +6,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useTilt } from "@/hooks/use-tilt";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -50,17 +49,16 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.1,
       delayChildren: 0.1
     }
   }
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { y: "100%" },
   visible: { 
-    opacity: 1, 
-    y: 0,
+    y: "0%",
     transition: {
       duration: 0.6,
       ease: [0.6, 0.05, 0.01, 0.9]
@@ -68,21 +66,14 @@ const itemVariants = {
   }
 }
 
-const textSlideIn = {
-  hidden: { x: -20, opacity: 0 },
-  visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-}
-
-const backgroundSlideIn = {
-  hidden: { clipPath: 'inset(0 100% 0 0)' },
-  visible: { clipPath: 'inset(0 0% 0 0)', transition: { duration: 1, ease: [0.76, 0, 0.24, 1] } },
+const textSlideUp = {
+    hidden: { y: "100%" },
+    visible: { y: "0%", transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
 
 
 function ProjectRow({ project, isMobile }: { project: typeof projectsData[0], isMobile?: boolean }) {
   const [hovered, setHovered] = useState(false);
-  const tiltRef = React.useRef<HTMLDivElement>(null);
-  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useTilt(tiltRef);
 
   if (isMobile) {
       return (
@@ -121,35 +112,18 @@ function ProjectRow({ project, isMobile }: { project: typeof projectsData[0], is
   }
   
   return (
-    <motion.div variants={itemVariants} className="border-t border-border overflow-hidden">
+    <motion.div variants={itemVariants} className="border-t border-border">
       <a 
         href={project.liveDemoUrl}
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="block relative group"
+        className="block relative group project-card"
       >
-        <motion.div 
-          className="absolute inset-0 bg-primary/90 pointer-events-none" 
-          initial="hidden"
-          animate={hovered ? "visible" : "hidden"}
-          variants={backgroundSlideIn}
-        />
-        <div 
-          ref={tiltRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="container mx-auto px-4 sm:px-6 lg:px-8"
-        >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-8 relative">
-            <motion.div initial="hidden" animate="visible" variants={textSlideIn}>
-              <h3 
-                className={cn(
-                  "font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-400 ease-in-out",
-                  hovered ? "text-primary-foreground" : "text-foreground"
-                )}
-              >
+            <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
                 {project.title}
                 <ArrowUpRight 
                   className={cn(
@@ -157,21 +131,12 @@ function ProjectRow({ project, isMobile }: { project: typeof projectsData[0], is
                     hovered && "-translate-y-1 translate-x-1"
                   )} 
                 />
-              </h3>
-            </motion.div>
+            </h3>
 
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={textSlideIn}
-              className={cn(
-                "text-right text-sm transition-colors duration-400 ease-in-out",
-                hovered ? "text-primary-foreground/80" : "text-muted-foreground"
-              )}
-            >
+            <div className="text-right text-sm text-muted-foreground">
               <p className="font-semibold">{project.client}</p>
               <p>{project.category}</p>
-            </motion.div>
+            </div>
             
             <AnimatePresence>
               {hovered && (
@@ -181,11 +146,6 @@ function ProjectRow({ project, isMobile }: { project: typeof projectsData[0], is
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   className="absolute left-1/2 -translate-x-1/2 w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
-                  style={{
-                    rotateX,
-                    rotateY,
-                    perspective: "1000px"
-                  }}
                 >
                   <Image
                     src={project.imageUrl}
@@ -265,8 +225,12 @@ export function Projects() {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        {projectsData.map((project) => (
-          <ProjectRow key={project.title} project={project} />
+        {projectsData.map((project, index) => (
+            <div key={index} className="overflow-hidden">
+                <motion.div variants={itemVariants}>
+                    <ProjectRow project={project} />
+                </motion.div>
+            </div>
         ))}
       </motion.div>
     </section>
