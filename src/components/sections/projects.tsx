@@ -178,9 +178,9 @@ export function Projects() {
         {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               style={{
-                x: '55%',
-                y: smoothMouseY,
-                translateX: "-50%",
+                top: smoothMouseY,
+                right: '20%',
+                translateX: "0%",
                 translateY: "-50%",
               }}
               initial={{ opacity: 0, scale: 0.8 }}
