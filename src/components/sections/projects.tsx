@@ -42,6 +42,28 @@ const projectsData = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { y: "100%" },
+  visible: {
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, 0.01, -0.05, 0.95]
+    }
+  }
+}
+
 export function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mouseY, setMouseY] = useState(0);
@@ -135,7 +157,14 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 relative overflow-hidden bg-background">
       {headingAndGradient}
-      <div className="relative border-b border-border" onMouseMove={handleMouseMove}>
+      <motion.div 
+        className="relative border-b border-border" 
+        onMouseMove={handleMouseMove}
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <AnimatePresence>
           {hoveredIndex !== null && (
             <motion.div
@@ -158,37 +187,39 @@ export function Projects() {
         </AnimatePresence>
 
         {projectsData.map((project, index) => (
-          <div
-            key={project.title}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className="group relative"
-          >
-            <div
-              className={
-                "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
-              }
-              style={{
-                clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
-              }}
-            />
-            <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center py-8 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
-                    <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
-                      {project.title}
-                      <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-                    </h3>
-                    <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
-                      <p className="font-semibold">{project.client}</p>
-                      <p>{project.category}</p>
-                    </div>
+          <div key={project.title} className="overflow-hidden">
+             <motion.div
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="group relative"
+                variants={itemVariants}
+              >
+              <div
+                className={
+                  "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
+                }
+                style={{
+                  clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
+                }}
+              />
+              <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex justify-between items-center py-8 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
+                      <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
+                        {project.title}
+                        <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                      </h3>
+                      <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
+                        <p className="font-semibold">{project.client}</p>
+                        <p>{project.category}</p>
+                      </div>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+             </motion.div>
           </div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
