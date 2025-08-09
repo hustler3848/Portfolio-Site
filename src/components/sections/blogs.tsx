@@ -62,11 +62,14 @@ export function Blogs() {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <motion.div className="text-center mb-12" variants={itemVariants}>
-          <h2 className="mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
-            From My Blog
-          </h2>
-          <p className="text-base md:text-lg text-secondary-foreground/80 max-w-2xl mx-auto">
+        <motion.div className="mb-12" variants={itemVariants}>
+          <div className="flex items-center gap-4">
+            <span className="w-3 h-3 bg-primary rounded-full"></span>
+            <h2 className="mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary animate-shine-infinite">
+              From My Blog
+            </h2>
+          </div>
+          <p className="text-base md:text-lg text-secondary-foreground/80 max-w-2xl">
             A collection of my thoughts on design, development, and the tech world.
           </p>
         </motion.div>
