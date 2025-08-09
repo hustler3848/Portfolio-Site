@@ -178,7 +178,7 @@ export function Projects() {
         {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               style={{
-                top: `calc(${smoothMouseY.get()}px + 20px)`,
+                top: smoothMouseY,
                 right: '20%',
                 translateX: "0%",
                 translateY: "-50%",
@@ -252,3 +252,4 @@ export function Projects() {
     </section>
   );
 }
+
