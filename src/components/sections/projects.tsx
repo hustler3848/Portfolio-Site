@@ -160,13 +160,13 @@ export function Projects() {
       <motion.div 
         className="relative border-b border-border" 
         onMouseMove={handleMouseMove}
-        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
       >
         <AnimatePresence>
-          {hoveredIndex !== null && (
+          {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               variants={imageVariants}
               initial="initial"
@@ -186,10 +186,10 @@ export function Projects() {
           )}
         </AnimatePresence>
 
-        {projectsData.map((project) => (
+        {projectsData.map((project, index) => (
           <div key={project.title} className="overflow-hidden">
              <motion.div
-                onMouseEnter={() => setHoveredIndex(project.title.length)}
+                onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="group relative"
                 variants={itemVariants}
@@ -199,7 +199,7 @@ export function Projects() {
                   "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
                 }
                 style={{
-                  clipPath: `inset(0 ${hoveredIndex === project.title.length ? '0' : '100%'} 0 0)`,
+                  clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
                 }}
               />
               <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
