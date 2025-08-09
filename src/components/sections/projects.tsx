@@ -3,9 +3,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTilt } from "@/hooks/use-tilt";
 import { ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const projectsData = [
   {
@@ -47,38 +49,166 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.15,
       delayChildren: 0.1
     }
   }
 }
 
 const itemVariants = {
-  hidden: { y: "100%" },
-  visible: {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.6,
       ease: [0.6, 0.01, -0.05, 0.95]
     }
   }
 }
 
+const textSlideIn = {
+  hidden: { x: -20, opacity: 0 },
+  visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
+}
+
+const backgroundSlideIn = {
+  hidden: { clipPath: 'inset(0 100% 0 0)' },
+  visible: { clipPath: 'inset(0 0% 0 0)', transition: { duration: 1, ease: [0.76, 0, 0.24, 1] } },
+}
+
+
+function ProjectRow({ project, isMobile }: { project: typeof projectsData[0], isMobile?: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  const tiltRef = React.useRef<HTMLDivElement>(null);
+  const { rotateX, rotateY, handleMouseMove, handleMouseLeave } = useTilt(tiltRef);
+
+  if (isMobile) {
+      return (
+        <motion.div 
+            key={project.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-card rounded-lg overflow-hidden shadow-lg"
+          >
+            <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
+              <div className="relative aspect-video">
+                <Image
+                  src={project.imageUrl}
+                  alt={project.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: 'cover' }}
+                  data-ai-hint={project.dataAiHint}
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-headline text-2xl font-bold flex items-start">
+                  {project.title}
+                  <ArrowUpRight className="h-5 w-5 ml-2 mt-1 shrink-0" />
+                </h3>
+                <div className="mt-2 text-sm text-muted-foreground">
+                  <p className="font-semibold">{project.client}</p>
+                  <p>{project.category}</p>
+                </div>
+              </div>
+            </a>
+          </motion.div>
+      );
+  }
+  
+  return (
+    <motion.div variants={itemVariants} className="border-t border-border overflow-hidden">
+      <a 
+        href={project.liveDemoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="block relative group"
+      >
+        <motion.div 
+          className="absolute inset-0 bg-primary/90 pointer-events-none" 
+          initial="hidden"
+          animate={hovered ? "visible" : "hidden"}
+          variants={backgroundSlideIn}
+        />
+        <div 
+          ref={tiltRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="container mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <div className="flex justify-between items-center py-8 relative">
+            <motion.div initial="hidden" animate="visible" variants={textSlideIn}>
+              <h3 
+                className={cn(
+                  "font-headline text-3xl md:text-5xl font-bold flex items-start transition-colors duration-400 ease-in-out",
+                  hovered ? "text-primary-foreground" : "text-foreground"
+                )}
+              >
+                {project.title}
+                <ArrowUpRight 
+                  className={cn(
+                    "w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300",
+                    hovered && "-translate-y-1 translate-x-1"
+                  )} 
+                />
+              </h3>
+            </motion.div>
+
+            <motion.div 
+              initial="hidden" 
+              animate="visible" 
+              variants={textSlideIn}
+              className={cn(
+                "text-right text-sm transition-colors duration-400 ease-in-out",
+                hovered ? "text-primary-foreground/80" : "text-muted-foreground"
+              )}
+            >
+              <p className="font-semibold">{project.client}</p>
+              <p>{project.category}</p>
+            </motion.div>
+            
+            <AnimatePresence>
+              {hovered && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="absolute left-1/2 -translate-x-1/2 w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
+                  style={{
+                    rotateX,
+                    rotateY,
+                    perspective: "1000px"
+                  }}
+                >
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    data-ai-hint={project.dataAiHint}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"/>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+          </div>
+        </div>
+      </a>
+    </motion.div>
+  );
+}
+
+
 export function Projects() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mouseY, setMouseY] = useState(0);
   const isMobile = useIsMobile();
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    setMouseY(e.clientY);
-  };
-
-  const imageVariants = {
-    initial: { opacity: 0, scale: 0.8, y: 0 },
-    enter: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-    exit: { opacity: 0, scale: 0.8, y: 0, transition: { duration: 0.2, ease: 'easeIn' } },
-  };
-  
   const headingAndGradient = (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div 
@@ -116,37 +246,7 @@ export function Projects() {
           </motion.div>
           <div className="grid grid-cols-1 gap-8">
             {projectsData.map((project, index) => (
-              <motion.div 
-                key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card rounded-lg overflow-hidden shadow-lg"
-              >
-                <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
-                  <div className="relative aspect-video">
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      style={{ objectFit: 'cover' }}
-                      data-ai-hint={project.dataAiHint}
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="font-headline text-2xl font-bold flex items-start">
-                      {project.title}
-                      <ArrowUpRight className="h-5 w-5 ml-2 mt-1 shrink-0" />
-                    </h3>
-                    <div className="mt-2 text-sm text-muted-foreground">
-                      <p className="font-semibold">{project.client}</p>
-                      <p>{project.category}</p>
-                    </div>
-                  </div>
-                </a>
-              </motion.div>
+              <ProjectRow key={project.title} project={project} isMobile />
             ))}
           </div>
         </div>
@@ -159,67 +259,16 @@ export function Projects() {
       {headingAndGradient}
       <motion.div 
         className="relative border-b border-border" 
-        onMouseMove={handleMouseMove}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <AnimatePresence>
-          {hoveredIndex !== null && projectsData[hoveredIndex] && (
-            <motion.div
-              variants={imageVariants}
-              initial="initial"
-              animate="enter"
-              exit="exit"
-              className="absolute left-1/2 -translate-x-1/2 w-[300px] h-[200px] md:w-[400px] md:h-[250px] rounded-lg overflow-hidden pointer-events-none z-10"
-              style={{ top: mouseY - 200 }}
-            >
-              <Image
-                src={projectsData[hoveredIndex].imageUrl}
-                alt={projectsData[hoveredIndex].title}
-                fill
-                style={{ objectFit: 'cover' }}
-                data-ai-hint={projectsData[hoveredIndex].dataAiHint}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {projectsData.map((project, index) => (
-          <div key={project.title} className="overflow-hidden">
-             <motion.div
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative"
-                variants={itemVariants}
-              >
-              <div
-                className={
-                  "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
-                }
-                style={{
-                  clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
-                }}
-              />
-              <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="flex justify-between items-center py-8 border-t border-border transition-colors duration-500 ease-in-out group-hover:text-primary-foreground">
-                      <h3 className="font-headline text-3xl md:text-5xl font-bold flex items-start">
-                        {project.title}
-                        <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 ml-2 mt-1 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-                      </h3>
-                      <div className="text-right text-sm text-muted-foreground transition-colors duration-500 ease-in-out group-hover:text-primary-foreground/80">
-                        <p className="font-semibold">{project.client}</p>
-                        <p>{project.category}</p>
-                      </div>
-                  </div>
-                </div>
-              </a>
-             </motion.div>
-          </div>
+          <ProjectRow key={project.title} project={project} />
         ))}
       </motion.div>
     </section>
   );
 }
+
