@@ -118,7 +118,7 @@ export function Projects() {
     const handleMouseMove = (e: MouseEvent) => {
         if(containerRef.current) {
             const rect = containerRef.current.getBoundingClientRect();
-            mouseX.set(e.clientX - rect.left);
+            mouseX.set(rect.width / 2); // Center horizontally
             mouseY.set(e.clientY - rect.top);
         }
     };
