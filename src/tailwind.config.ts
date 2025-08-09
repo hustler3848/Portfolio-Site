@@ -12,6 +12,7 @@ export default {
     fontFamily: {
       body: ['"Familjen Grotesk"', 'sans-serif'],
       headline: ['"Bricolage Grotesque"', 'serif'],
+      sans: ['"DM Sans"', 'sans-serif'],
       code: ['monospace'],
     },
     extend: {

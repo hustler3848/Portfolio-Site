@@ -63,13 +63,13 @@ export function Blogs() {
         variants={containerVariants}
       >
         <motion.div className="mb-12" variants={itemVariants}>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2">
             <span className="w-3 h-3 bg-primary rounded-full"></span>
             <h2 className="text-sm uppercase tracking-widest font-semibold">
               From My Blog
             </h2>
           </div>
-          <p className="text-sm text-secondary-foreground/60 max-w-2xl">
+          <p className="text-xs text-secondary-foreground/50 max-w-2xl mt-2 font-sans">
             A collection of my thoughts on design, development, and the tech world.
           </p>
         </motion.div>
