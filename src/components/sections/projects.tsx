@@ -181,7 +181,7 @@ export function Projects() {
         {hoveredIndex !== null && projectsData[hoveredIndex] && (
             <motion.div
               style={{
-                x: smoothMouseX,
+                x: '55%',
                 y: smoothMouseY,
                 translateX: "-50%",
                 translateY: "-50%",
