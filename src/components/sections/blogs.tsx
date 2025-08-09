@@ -69,7 +69,7 @@ export function Blogs() {
               From My Blog
             </h2>
           </div>
-          <p className="text-xs text-secondary-foreground/50 max-w-2xl mt-2 font-sans">
+          <p className="font-sans text-xs text-secondary-foreground/50 max-w-2xl mt-2">
             A collection of my thoughts on design, development, and the tech world.
           </p>
         </motion.div>
