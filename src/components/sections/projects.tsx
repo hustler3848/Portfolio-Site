@@ -1,9 +1,10 @@
 
 "use client";
 
+import * as React from "react";
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTilt } from "@/hooks/use-tilt";
 import { ArrowUpRight } from "lucide-react";
@@ -245,7 +246,7 @@ export function Projects() {
             <h2 className="text-sm uppercase tracking-widest font-semibold">Featured Projects</h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-8">
-            {projectsData.map((project, index) => (
+            {projectsData.map((project) => (
               <ProjectRow key={project.title} project={project} isMobile />
             ))}
           </div>
@@ -264,11 +265,10 @@ export function Projects() {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        {projectsData.map((project, index) => (
+        {projectsData.map((project) => (
           <ProjectRow key={project.title} project={project} />
         ))}
       </motion.div>
     </section>
   );
 }
-
