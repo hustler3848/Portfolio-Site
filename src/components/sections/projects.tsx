@@ -186,10 +186,10 @@ export function Projects() {
           )}
         </AnimatePresence>
 
-        {projectsData.map((project, index) => (
+        {projectsData.map((project) => (
           <div key={project.title} className="overflow-hidden">
              <motion.div
-                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseEnter={() => setHoveredIndex(project.title.length)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="group relative"
                 variants={itemVariants}
@@ -199,7 +199,7 @@ export function Projects() {
                   "absolute inset-0 bg-primary transition-all duration-500 ease-in-out"
                 }
                 style={{
-                  clipPath: `inset(0 ${hoveredIndex === index ? '0' : '100%'} 0 0)`,
+                  clipPath: `inset(0 ${hoveredIndex === project.title.length ? '0' : '100%'} 0 0)`,
                 }}
               />
               <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="block relative">
